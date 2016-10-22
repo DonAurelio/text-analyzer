@@ -85,8 +85,9 @@ for w in ws:
     Iterar el arreglo que devuelve TweetTokenizer y "castear" cada palabra
     en word usando freeling.word() al finalizar crear un list<word>
     
+    Parte dificil?:
     Hacer a mano tagueo set_tag() de símbolos, nicknames, hashtags, urls y para
-    cada uno definir como análisis definitivo con lock_analysis()
+    cada uno setear lock_analysis() para que sean ignorados por el analyze()
 
     Convertir el list<word> a sentence, aplicar el análisis morfológico, 
     crear estructura de datos para enviar a la aplicación web (interpretar etiquetas)
