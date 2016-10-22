@@ -3,8 +3,8 @@
 import freeling
 from nltk.tokenize import TweetTokenizer
 
-
-## Modify this line to be your FreeLing installation directory
+#============================ Freling Initialization ================================
+# Modify this line to be your FreeLing installation directory
 FREELINGDIR = "/usr";
 
 DATA = FREELINGDIR+"/share/freeling/";
@@ -44,6 +44,158 @@ mf.set_active_options(False, True, True, True,  # select which among created
 #parser= freeling.chart_parser(DATA+LANG+"/chunker/grammar-chunk.dat");
 #dep=freeling.dep_txala(DATA+LANG+"/dep_txala/dependences.dat", parser.get_start_symbol());
 
+#============================ Freling Initialization ================================
+
+
+#============================ Descripción del proyecto ==============================
+# El procesamiento de lenguaje natural de textos comprende 3 etapas 
+# 1) Preprocesamiento: Consiste en normalizar el texto de entrada, en algunos casos 
+# se corrigen errores ortográficos, se eliminan espacios innecesarios y dependiendo 
+# del tipo de analisis que se desee hacer se le dá un significado alternativo a los 
+# emoticones, se elimian hash "#" haciendo que el resto del hash haga parte de la oración
+# tambien se modifican urls y nicknames. 
+# NOTA: Para este caso no se hace la etapa de preprocesado
+
+# 2) Segmentación de frases y palabras
+# Tras el preprocesado del texto ya se han normalizado algunos de los elementos que podián
+# complicar la identificación y división de frases y palabras, como la incorrecta colocación de 
+# signos de puntuación o la aparición de nombres de usuarios de twitter o hashtags, para la 
+# segmenación de oraciones, se usa la biblioteca nltk.
+# NOTA: Las estructuras de un parrafo son: 
+#   Sentencias o Oraciones (componentes del parrafo).
+#   Palabras hace parte de una sentencia u oración 
+# NLTK primero lleva a cabo la segmentación de oraciones y luego la segmentación de palabras 
+
+# 3) Análisis morfológico
+# Dada una oracion S compuesta por un conjunto de palabras Wi, y un conjunto de etiquetas 
+# T con etiquetas Ti, el proceso de análisis morfológico tambien conocido como etiquetación,
+# consiste en asignar a cada palabra de la oración su etiqueta correspondiente, creando una 
+# lista de tuplas (s,t) donde s partenece a S y t pertenece a T
+
+EAGLES_ADJETIVOS = {
+  '1A':'Adjetivo',
+  '2Q':'Calificativo',
+  '3A':'Apreciativo',
+  '4M':'Masculino',
+  '4F':'Femenino',
+  '4C':'Común',
+  '5S':'Singular',
+  '5P':'Plural',
+  '5N':'Invariable',
+  '60':'-',
+  '7P':'Participio'
+}
+
+EAGLES_ADVERBIOS = {
+  '1R':'Adverbio',
+  '2G':'General',
+  '30':'-',
+  '40':'-',
+  '50':'-'
+}
+
+EAGLES_ARTICULOS = {
+  '1T':'Artículo',
+  '2D':'Definido',
+  '3M':'Masculino',
+  '3F':'Femenino',
+  '3C':'Común',
+  '4S':'Singular',
+  '4P':'Plural',
+  '50':'-'
+}
+
+EAGLES_DETERMINANTES = {
+  '1D':'Determinante',
+  '2D':'Demostrativo',
+  '2P':'Posesivo',
+  '2T':'Interrogativo',
+  '2E':'Exclamativo',
+  '2I':'Indefinido',
+  '31':'Primera',
+  '32':'Segunda',
+  '33':'Tercera',
+  '4M':'Masculino',
+  '4F':'Femenino',
+  '4C':'Común',
+  '5S':'Singular',
+  '5P':'Plural',
+  '5N':'Invariable',
+  '6O':'-',
+  '71':'1 Persona-sg',
+  '72':'2 Persona-sg',
+  '70':'3 Persona',
+  '74':'1 Persona-pl',
+  '75':'2 Persona-pl'
+}
+
+EAGLES_NOMBRES = {
+  '1N':'Nombre',
+  '2C':'Común',
+  '2P':'Propio',
+  '3M':'Masculino',
+  '3F':'Femenino',
+  '3C':'Común',
+  '4S':'Singular',
+  '4P':'Plural',
+  '4N':'Invariable',
+  '50':'-',
+  '60':'-',
+  '7A':'Apreciativo'
+}
+
+EAGLES_VERBOS = {
+  '1V':'Verbo',
+  '2M':'Principal',
+  '2A':'Auxiliar',
+  '3I':'Indicativo',
+  '3S':'Subjuntivo',
+  '3M':'Imperactivo',
+  '3C':'Condicional',
+  '3N':'Infinitivo',
+  '3G':'Gerundio',
+  '3P':'Participio',
+  '4P':'Presente',
+  '4I':'Imperfecto',
+  '4F':'Futuro',
+  '4S':'Pasado',
+  '51':'Primera',
+  '52':'Segunda',
+  '53':'Tercera',
+  '6S':'Singular',
+  '6P':'Plural',
+  '7M':'Masculino',
+  '7F':'Femenino'
+}
+
+EAGLES_PRONOMBRES = {
+  '1P':'Pronombre',
+  '2P':'Personal',
+  '2D':'Demostrativo',
+  '2X':'Posesivo',
+  '2I':'Indefinido',
+  '2T':'Interrogativo',
+  '2R':'Relativo',
+  '31':'Primera',
+  '32':'Segunda',
+  '33':'Tercera',
+  '4M':'Masculino',
+  '4F':'Femenino',
+  '4C':'Común',
+  '5S':'Singular',
+  '5P':'Plural',
+  '5N':'Invariable',
+  '6N':'Normativo',
+  '6A':'Acusativo',
+  '6D':'Dativo',
+  '6O':'Oblicuo',
+  '71':'1 Persona-sg',
+  '72':'2 Persona-sg',
+  '70':'3 Persona',
+  '74':'1 Persona-pl'
+  '75':'2 Persona-pl',
+  '8P':'Polite'
+}
 
 
 mensaje = "El músico bajo toca el bajo"
