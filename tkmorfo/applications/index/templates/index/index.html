@@ -1,1 +1,53 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="page-header">
+<h1>Texto a Procesar</h1>
+</div>
+<form action="{% url 'index:index' %}"  method="POST">{% csrf_token %}
+    <div class="form-group">
+        <textarea name="text" class="form-control" rows="3" maxlength="140" placeholder="Escriba el texto aqui ..."></textarea>
+    </div>
+    <div class="form-group">
+        <div id="alert"></div>
+    </div>
+    <button id="btn-analizar" type="submit" class="btn btn-primary pull-right">Analizar</button>
+</form>
+<div id="result"></div>
+{% endblock %}
+{% block js %}
+{{ block.super }}
+
+<!-- Including jQuery Form plugin -->
+<script src="{% static 'jquery/jquery.form.min.js' %}"></script>
+<script type="text/javascript">
+  /* submit del formulario */
+  $("#btn-analizar").click(function(event){
+      event.preventDefault();
+      var $form = $("form");
+      $form.ajaxSubmit({
+          url: $form.attr('action'),
+          dataType: 'json',
+          success: function(response, status, xhr, $form) {
+              if(response.status==true){
+                $("#result").html(response.html);
+              }else{
+                    var html = '<div class="alert alert-warning" role="alert"> \
+                    <strong>Oh!</strong> Debe diligenciar bien el campo de texto.\
+                    </div>';
+                  $("#alert").html(html);
+              };
+          },
+          error: error
+      });
+  });
+
+/* Aviso de error  */
+var error = function (data) {
+    var html = '<div class="alert alert-danger" role="alert"> \
+                <strong>Oh!</strong> Ha ocurrido un error en el servidor.\
+            </div>';
+    $("#alert").html(html);
+}
+</script>
+{% endblock %}
