@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
+######################################################################
 from twokenize import emoticon, Hashtag, AtMention, url
 from twokenize import tokenize as ark_tokenize
 #from nltk.tokenize import TweetTokenizer
 import freeling
 import re
+
+######################################################################
 
 #============================ Freling Initialization ================================
 # Modify this line to be your FreeLing installation directory
@@ -93,8 +96,17 @@ f_mf.set_active_options(False, True, True, True,  # select which among created
 
  """
 
+def procesar_texto_nltk_freeling(texto):
+  pass
+
+def procesar_texto_nltk(texto):
+  pass
+
+def procesar_texto_freeling(texto):
+  pass
+
 ######################################################################
-# Funciones auxiliares 
+# Funciones internas 
 
 def list2tuple(lis):
   """
@@ -117,6 +129,7 @@ def taggear(w,tag):
   w.lock_analysis()
 
 ######################################################################
+#
 
 def pre_mf_analyze(tokens):
   """
@@ -157,10 +170,10 @@ def analisis_morfologico(lword):
   sentencia = f_mf.analyze(sentencia)
 
   for w in sentencia:
-    print "Análisis de: ", w.get_form()
+    print("Análisis de: ", w.get_form())
   for w_a in w.get_analysis():
-    print w_a.get_lemma()
-    print w_a.get_tag()
+    print (w_a.get_lemma())
+    print (w_a.get_tag())
 
   return 
 
