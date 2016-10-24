@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
-
+######################################################################
+from twokenize import emoticon, Hashtag, AtMention, url
+from twokenize import tokenize as ark_tokenize
+#from nltk.tokenize import TweetTokenizer
 import freeling
-from nltk.tokenize import TweetTokenizer
+import re
+
+######################################################################
 
 #============================ Freling Initialization ================================
 # Modify this line to be your FreeLing installation directory
@@ -262,21 +267,7 @@ EAGLES_SIGNOS_DE_PUNTUACION = {
 
  """
 
- def to_freeling_lword(lis):
-  """
-    Lista de Strings a Lista de palabras
-    
-    Recibe una lista de strings y retorna una tupla de words list<word>.
-    ya que freeling trabaja con este tipo de colecciones.
-  """
-  lword = ()
-  for w in lis:
-    lword += (freeling.word(w),)
-
-  oracion = freeling.sentence(lword)
-  return oracion
-
-def procesar_texto_ntlk_freeling(texto):
+def procesar_texto_nltk_freeling(texto):
   # Segmentación de frases (sentencias) y palabras con nltk
   # Tokenización
   tknzr = TweetTokenizer()
@@ -295,7 +286,7 @@ def procesar_texto_nltk(texto):
   msg = f_mf.analyze(msg)
   #show_mf(msg)
   for w in sentence:
-  print("Análisis de: ", w.get_form())
+    print("Análisis de: ", w.get_form())
   for w_a in w.get_analysis():
     print (w_a.get_lemma())
     print (w_a.get_tag())
@@ -322,21 +313,98 @@ def procesar_texto_freeling(texto):
       print (a.get_lemma())
       print (a.get_tag())
 
+######################################################################
+# Funciones internas 
 
-# Recibe un list<word> y taguea símbolos, nicknames, hashtags, urls
-def pre_mf_analyze():
+def list2tuple(lis):
+  """
+  Recibe una lista y devuelve una tupla con los mismos elementos
+  """
+  tup = ()
+  for item in lis:
+    tup += (item,)
+  return tup
+
+def taggear(w,tag):
+  """
+  A una palabra freeling "w" le asigna un "tag", lema="" y bloquea el
+  análisis respectivo
+  """
+  analisis = freeling.analysis()
+  analisis.set_tag(tag)
+  analisis.set_lemma("")
+  w.set_analysis(analisis)
+  w.lock_analysis()
+
+######################################################################
+#
+
+def pre_mf_analyze(tokens):
+  """
+  :param lis: lista de strings
+  
+  Hace el casting de los elementos a <word> y si es una expresión
+  especial (emoticon, nickname, hashtag o url) le asigna una
+  anotación morfológica
+  
+  :retorna: tupla de words list<word>
+  """
+  re_emoticon = re.compile(emoticon)
+  re_hashtag = re.compile(Hashtag)
+  re_nickname = re.compile(AtMention)
+  re_url = re.compile(url)
+  for i, tk in enumerate(tokens):
+    tokens[i] = freeling.word(tk)
+    if re_emoticon.match(tk):
+      taggear(tokens[i], "E")
+    elif re_nickname.match(tk):
+      taggear(tokens[i], "@")
+    elif re_hashtag.match(tk):
+      taggear(tokens[i], "#")
+    elif re_hashtag.match(tk):
+      taggear(tokens[i], "#")
+  return list2tuple(tokens)
+
+def analisis_morfologico(lword):
+  """
+  Recibe una tupla list<word>, aplica análisis morfológico, por cada
+  elemento retorna el elemento y una lista con sublistas de parejas
+  lema, tag
+
+  Ejemplo para toca:
+  [ toca, [[tocar, VMIP3S0],[toca,NCFS000],[tocar,VMM02S0]] ]
+  """
+  sentencia = freeling.sentence(lword)
+  sentencia = f_mf.analyze(sentencia)
+
+  for w in sentencia:
+    print("Análisis de: ", w.get_form())
+  for w_a in w.get_analysis():
+    print (w_a.get_lemma())
+    print (w_a.get_tag())
+
+  return 
+
+######################################################################
+# Funciones para interacción externa
+def obtener_tk(texto):
   pass
 
-# Recibe una etiqueta EAGLES y retorna un arreglo con la interpretación
-""" ejemplo:
-  AQ0CP00 ->
-  {"Categoría": "Adjetivo", Tipo": "Calificativo", "Grado": 0, "Género": "Común",
-   "Número": "Plurar", "Caso":0, "Función":0}
- """
+def obtener_mf(texto):
+  pass
+######################################################################
 
+######################################################################
 if __name__ == '__main__':
   mensaje = "El músico bajo toca el bajo"
   mensaje1 = "Mi #Tbt hoy es con @MarcAnthony  y seguro les gustara quiero que continúen \
   ustedes con la letra. Cuando nos volvamos a encontrar :)"
   mensaje2 = "Por fin!! de nuevo en Twitter! =D se me daño mi celular pero ya tengo uno \
   nuevo =D @rosariomeneses1 creo que es igual al tuyo #emoticones XD <3 ^_^!"
+  m_emojis = "Hola si =D entonces o.O 12:30 O.o (: jeje :v 1, 2, 3.5 1,2"
+
+  
+  # Tokenizar con Twokenize
+  tokens = ark_tokenize(m_emojis)
+  
+######################################################################
