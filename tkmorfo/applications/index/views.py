@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 import json
+from tools import tkmorfo 
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
@@ -12,11 +13,11 @@ class IndexView(TemplateView):
 
 	def post(self,request,*args,**kwargs):
 		text = request.POST.get('text',None)
-		preporcesamiento = 'Preprocesamiento'
-		tokenización = 'Tokenización'
-		analisis = 'Analisis Morfologico'
+		tokens = tkmorfo.tokenizar(text)
+		pre_analisis = tkmorfo.parse_sentence(tkmorfo.pre_mf_analyze(tokens))
+		print "PRE ANALISIS",pre_analisis
 		template = loader.get_template('index/includes/result.html')
-		context = {}
+		context = {'tokens':tokens}
 		html = template.render(context)
 
 		# Si el campo de texto está vacio entonces se retorna false

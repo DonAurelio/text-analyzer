@@ -5,7 +5,6 @@ from twokenize import tokenize as ark_tokenize
 #from nltk.tokenize import TweetTokenizer
 import freeling
 import re
-
 ######################################################################
 
 #============================ Freling Initialization ================================
@@ -16,9 +15,6 @@ DATA = FREELINGDIR+"/share/freeling/";
 LANG="es";
 
 freeling.util_init_locale("default");
-
-# create language analyzer
-#la=freeling.lang_ident(DATA+"common/lang_ident/ident.dat");
 
 # create options set for maco analyzer. Default values are Ok, except for data files.
 op= freeling.maco_options("es");
@@ -33,21 +29,13 @@ op.set_data_files( "",
                    DATA + LANG + "/probabilitats.dat");
 
 # create analyzers
-f_tk=freeling.tokenizer(DATA+LANG+"/tokenizer.dat");
-#sp=freeling.splitter(DATA+LANG+"/splitter.dat");
-#sid=sp.open_session();
+#f_tk=freeling.tokenizer(DATA+LANG+"/tokenizer.dat"); # tokenizador de freeling
 f_mf=freeling.maco(op);
 
 # activate mmorpho odules to be used in next call
 f_mf.set_active_options(False, True, True, True,  # select which among created 
                       True, True, False, True,  # submodules are to be used. 
                       True, True, True, True ); # default: all created submodules are used
-
-# create tagger, sense anotator, and parsers
-#tg=freeling.hmm_tagger(DATA+LANG+"/tagger.dat",True,2);
-#sen=freeling.senses(DATA+LANG+"/senses.dat");
-#parser= freeling.chart_parser(DATA+LANG+"/chunker/grammar-chunk.dat");
-#dep=freeling.dep_txala(DATA+LANG+"/dep_txala/dependences.dat", parser.get_start_symbol());
 
 #============================ Freling Initialization ================================
 
@@ -95,28 +83,7 @@ f_mf.set_active_options(False, True, True, True,  # select which among created
     y mostrar
 
  """
-
-def procesar_texto_nltk_freeling(texto):
-  pass
-
-def procesar_texto_nltk(texto):
-  pass
-
-def procesar_texto_freeling(texto):
-  pass
-
-######################################################################
-# Funciones internas 
-
-def list2tuple(lis):
-  """
-  Recibe una lista y devuelve una tupla con los mismos elementos
-  """
-  tup = ()
-  for item in lis:
-    tup += (item,)
-  return tup
-
+# Funciones auxiliares 
 def taggear(w,tag):
   """
   A una palabra freeling "w" le asigna el "tag", lema="" y bloquea el
@@ -128,19 +95,44 @@ def taggear(w,tag):
   w.set_analysis(analisis)
   w.lock_analysis()
 
-######################################################################
-#
+def parse_sentence(sentencia):
+  """
+    Parsear sentencia
 
-def pre_mf_analyze(tokens):
+    Recibe una lista de objetos
+    world y retorna uns lista de listas strings python
+  """
+  info = {}
+  for w in sentencia:
+    for w_a in w.get_analysis():
+      lem_tag = []
+      lem_tag.append(w_a.get_lemma())
+      lem_tag.append(w_a.get_tag())
+      info[w.get_form()] = lem_tag
+  
+  return info
+
+# Funciones análisis
+def tokenizar(texto):
+  """
+    Tokenizador de Twokenizer
+
+    Recibe un texto en string y retorna una lista 
+    de tokens palabras.
+  """
+  return ark_tokenize(texto)
+
+def pre_mf_analyze(listatokens):
   """
   :param lis: lista de strings
   
   Hace el casting de los elementos a <word> y si es una expresión
-  especial (emoticon, nickname, hashtag o url) le asigna una
-  anotación morfológica
+  especial (emoticon, nickname, hashtag o url) le asigna una anotación
+  morfológica.
   
   :retorna: tupla de words list<word>
   """
+  tokens = listatokens[:]
   re_emoticon = re.compile(emoticon)
   re_hashtag = re.compile(Hashtag)
   re_nickname = re.compile(AtMention)
@@ -155,48 +147,61 @@ def pre_mf_analyze(tokens):
       taggear(tokens[i], "#")
     elif re_url.match(tk):
       taggear(tokens[i], "U")
-  return list2tuple(tokens)
+  return freeling.sentence(tuple(tokens))
 
 def analisis_morfologico(lword):
   """
   Recibe una tupla list<word>, aplica análisis morfológico, por cada
   elemento retorna el elemento y una lista con sublistas de parejas
   lema, tag
-
   Ejemplo para toca:
-  [ toca, [[tocar, VMIP3S0],[toca,NCFS000],[tocar,VMM02S0]] ]
+  [ "toca", [["tocar", "VMIP3S0"],["toca","NCFS000"],["tocar","VMM02S0"]] ]
   """
   sentencia = freeling.sentence(lword)
   sentencia = f_mf.analyze(sentencia)
 
-  for w in sentencia:
-    print("Análisis de: ", w.get_form())
-  for w_a in w.get_analysis():
-    print (w_a.get_lemma())
-    print (w_a.get_tag())
+  return sentencia
 
-  return 
 
 ######################################################################
-# Funciones para interacción externa
-def obtener_tk(texto):
-  pass
+
+######################################################################
+# Función para interacción externa
 
 def obtener_mf(texto):
-  pass
+  """
+  Ejemplo para toca:
+  {"n_tokens": 1,
+  "tokens":["toca"]
+  "toca": [["tocar", "VMIP3S0"],["toca","NCFS000"],["tocar","VMM02S0"]] }
+  """
+  tokens = ark_tokenize(texto)
+  n_tokens = len(tokens)
+  result = analisis_morfologico(pre_mf_analyze(tokens))
+  print (result)
+
 ######################################################################
 
 ######################################################################
 if __name__ == '__main__':
-  mensaje = "El músico bajo toca el bajo"
+  mensaje = "El musico bajo toca el bajo"
   mensaje1 = "Mi #Tbt hoy es con @MarcAnthony  y seguro les gustara quiero que continúen \
   ustedes con la letra. Cuando nos volvamos a encontrar :)"
   mensaje2 = "Por fin!! de nuevo en Twitter! =D se me daño mi celular pero ya tengo uno \
   nuevo =D @rosariomeneses1 creo que es igual al tuyo #emoticones XD <3 ^_^!"
   m_emojis = "Hola si =D entonces o.O 12:30 O.o (: jeje :v 1, 2, 3.5 1,2"
 
-  
+
   # Tokenizar con Twokenize
-  tokens = ark_tokenize(m_emojis)
+  tokens = ark_tokenize(mensaje)
+  pre = pre_mf_analyze(tokens)
+  morfo = analisis_morfologico(pre)
+  print(pre)
+  print(tokens)
+  print(morfo)
+
+
+  #morfo = analisis_morfologico(pre)
+  #print(morfo)
   
 ######################################################################
