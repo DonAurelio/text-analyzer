@@ -79,186 +79,15 @@ f_mf.set_active_options(False, True, True, True,  # select which among created
 
 #============================ Descripción del proyecto ==============================
 
-#============================ Definición Etiquetas EAGLES ===========================
 
-EAGLES_ADJETIVOS = {
-  '1A':'Adjetivo',
-  '2Q':'Calificativo',
-  '3A':'Apreciativo',
-  '4M':'Masculino',
-  '4F':'Femenino',
-  '4C':'Común',
-  '5S':'Singular',
-  '5P':'Plural',
-  '5N':'Invariable',
-  '60':'-',
-  '7P':'Participio'
-}
-
-EAGLES_ADVERBIOS = {
-  '1R':'Adverbio',
-  '2G':'General',
-  '30':'-',
-  '40':'-',
-  '50':'-'
-}
-
-EAGLES_ARTICULOS = {
-  '1T':'Artículo',
-  '2D':'Definido',
-  '3M':'Masculino',
-  '3F':'Femenino',
-  '3C':'Común',
-  '4S':'Singular',
-  '4P':'Plural',
-  '50':'-'
-}
-
-EAGLES_DETERMINANTES = {
-  '1D':'Determinante',
-  '2D':'Demostrativo',
-  '2P':'Posesivo',
-  '2T':'Interrogativo',
-  '2E':'Exclamativo',
-  '2I':'Indefinido',
-  '31':'Primera',
-  '32':'Segunda',
-  '33':'Tercera',
-  '4M':'Masculino',
-  '4F':'Femenino',
-  '4C':'Común',
-  '5S':'Singular',
-  '5P':'Plural',
-  '5N':'Invariable',
-  '6O':'-',
-  '71':'1 Persona-sg',
-  '72':'2 Persona-sg',
-  '70':'3 Persona',
-  '74':'1 Persona-pl',
-  '75':'2 Persona-pl'
-}
-
-EAGLES_NOMBRES = {
-  '1N':'Nombre',
-  '2C':'Común',
-  '2P':'Propio',
-  '3M':'Masculino',
-  '3F':'Femenino',
-  '3C':'Común',
-  '4S':'Singular',
-  '4P':'Plural',
-  '4N':'Invariable',
-  '50':'-',
-  '60':'-',
-  '7A':'Apreciativo'
-}
-
-EAGLES_VERBOS = {
-  '1V':'Verbo',
-  '2M':'Principal',
-  '2A':'Auxiliar',
-  '3I':'Indicativo',
-  '3S':'Subjuntivo',
-  '3M':'Imperactivo',
-  '3C':'Condicional',
-  '3N':'Infinitivo',
-  '3G':'Gerundio',
-  '3P':'Participio',
-  '4P':'Presente',
-  '4I':'Imperfecto',
-  '4F':'Futuro',
-  '4S':'Pasado',
-  '51':'Primera',
-  '52':'Segunda',
-  '53':'Tercera',
-  '6S':'Singular',
-  '6P':'Plural',
-  '7M':'Masculino',
-  '7F':'Femenino'
-}
-
-EAGLES_PRONOMBRES = {
-  '1P':'Pronombre',
-  '2P':'Personal',
-  '2D':'Demostrativo',
-  '2X':'Posesivo',
-  '2I':'Indefinido',
-  '2T':'Interrogativo',
-  '2R':'Relativo',
-  '31':'Primera',
-  '32':'Segunda',
-  '33':'Tercera',
-  '4M':'Masculino',
-  '4F':'Femenino',
-  '4C':'Común',
-  '5S':'Singular',
-  '5P':'Plural',
-  '5N':'Invariable',
-  '6N':'Normativo',
-  '6A':'Acusativo',
-  '6D':'Dativo',
-  '6O':'Oblicuo',
-  '71':'1 Persona-sg',
-  '72':'2 Persona-sg',
-  '70':'3 Persona',
-  '74':'1 Persona-pl',
-  '75':'2 Persona-pl',
-  '8P':'Polite'
-}
-
-EAGLES_CONJUNCIONES = {
-  '1C':'Conjunción',
-  '2C':'Coordinada',
-  '2S':'Subordinada',
-  '30':'-',
-  '40':'-'
-}
-
-EAGLES_NUMERALES = {
-  '1M':'Numeral',
-  '2C':'Cardinal',
-  '2O':'Ordinal',
-  '3M':'Masculino',
-  '3F':'Femenino',
-  '3C':'Común',
-  '4S':'Singular',
-  '4P':'Plural',
-  '50':'-',
-  '6P':'Pronominal',
-  '6D':'Determinante',
-  '6A':'Adjetivo'
-}
-
-EAGLES_INTERJECCIONES = {
-  '1I':'Interjección'
-}
-
-EAGLES_ABREVIATURAS = {
-  '1Y':'Abreviratura'
-}
-
-EAGLES_PREPOSICIONES = {
-  '1S':'Adposición',
-  '2P':'Preposición',
-  '3S':'Simple',
-  '3C':'Contraída',
-  '3M':'Masculino',
-  '4S':'Singular'
-}
-
-EAGLES_SIGNOS_DE_PUNTUACION = {
-  '1F':'Puntuación'
-}
-
-#============================ Definición Etiquetas EAGLES ===========================
-
-#============================ Algoritmo Propuesto ===================================
+######################################################################
+# ALGORITMO PROPUESTO
+######################################################################
 """ 
     Iterar el arreglo que devuelve TweetTokenizer (lista de strings) y cada palabra
     a word usando freeling.word() al finalizar crear un list<word>
     
-    Parte dificil?:
-    Hacer a mano tagueo set_tag() de símbolos, nicknames, hashtags, urls y para
+    Hacer tag set_tag() de símbolos, nicknames, hashtags, urls y para
     cada uno setear lock_analysis() para que sean ignorados por el analyze()
 
     Convertir el list<word> a sentence, aplicar el análisis morfológico, 
@@ -268,50 +97,13 @@ EAGLES_SIGNOS_DE_PUNTUACION = {
  """
 
 def procesar_texto_nltk_freeling(texto):
-  # Segmentación de frases (sentencias) y palabras con nltk
-  # Tokenización
-  tknzr = TweetTokenizer()
-  tkn_mensaje = tknzr.tokenize(texto)
+  pass
 
 def procesar_texto_nltk(texto):
-  print ("Usando tokenizacion de nltk: ")
-  # tokenizacion con TweetTokenizer
-  tknzr = TweetTokenizer()
-  tkn_mensaje = tknzr.tokenize(mensaje)
-  print (tkn_mensaje)
-  # crear list<word> y sentence
-  msg = to_freeling_lword(tkn_mensaje)
-  msg = freeling.sentence(msg)
-  # aplicar análisis morfo
-  msg = f_mf.analyze(msg)
-  #show_mf(msg)
-  for w in sentence:
-    print("Análisis de: ", w.get_form())
-  for w_a in w.get_analysis():
-    print (w_a.get_lemma())
-    print (w_a.get_tag())
+  pass
 
 def procesar_texto_freeling(texto):
-  # análisis morfológico solamente sobre las palabras del Español
-  print ("Usando tokenizacion de freeling: ")
-
-  # tokenize() de freeling retorna un list<word>
-  tk_msg = f_tk.tokenize(texto)
-  # En este caso sentence recibe un list<word> y devuelve un sentence
-  s_msg = freeling.sentence(tk_msg)
-  # analyze recibe un sentence y me retorna un sentence analizado :P
-  s_msg = f_mf.analyze(s_msg)
-
-  # retorna vector<word>
-  ws = s_msg.get_words()
-  # iterar sobre las word
-  for w in ws:
-    print("Análisis de: ", w.get_form())
-    #print (w.get_lemma())
-    #print (w.get_tag())
-    for a in w.get_analysis():
-      print (a.get_lemma())
-      print (a.get_tag())
+  pass
 
 ######################################################################
 # Funciones internas 
@@ -327,7 +119,7 @@ def list2tuple(lis):
 
 def taggear(w,tag):
   """
-  A una palabra freeling "w" le asigna un "tag", lema="" y bloquea el
+  A una palabra freeling "w" le asigna el "tag", lema="" y bloquea el
   análisis respectivo
   """
   analisis = freeling.analysis()
@@ -361,8 +153,8 @@ def pre_mf_analyze(tokens):
       taggear(tokens[i], "@")
     elif re_hashtag.match(tk):
       taggear(tokens[i], "#")
-    elif re_hashtag.match(tk):
-      taggear(tokens[i], "#")
+    elif re_url.match(tk):
+      taggear(tokens[i], "U")
   return list2tuple(tokens)
 
 def analisis_morfologico(lword):
