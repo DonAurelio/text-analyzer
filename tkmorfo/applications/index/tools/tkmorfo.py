@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-######################################################################
+
 from twokenize import emoticon, Hashtag, AtMention, url
 from twokenize import tokenize as ark_tokenize
-#from nltk.tokenize import TweetTokenizer
 import freeling
 import re
-######################################################################
 
 #============================ Freling Initialization ================================
 # Modify this line to be your FreeLing installation directory
@@ -67,10 +65,7 @@ f_mf.set_active_options(False, True, True, True,  # select which among created
 
 #============================ Descripción del proyecto ==============================
 
-
-######################################################################
 # ALGORITMO PROPUESTO
-######################################################################
 """ 
     Iterar el arreglo que devuelve TweetTokenizer (lista de strings) y cada palabra
     a word usando freeling.word() al finalizar crear un list<word>
@@ -83,6 +78,7 @@ f_mf.set_active_options(False, True, True, True,  # select which among created
     y mostrar
 
  """
+
 # Funciones auxiliares 
 def taggear(w,tag):
   """
@@ -96,42 +92,21 @@ def taggear(w,tag):
   w.lock_analysis()
 
 def parse_sentence(sentencia):
-  """
-    Parsear sentencia
-
-    Recibe una lista de objetos
-    world y retorna uns lista de listas strings python
-  """
-  info = {}
+  info = []
   for w in sentencia:
+    palabra = w.get_form()
+    lem_tag = []
     for w_a in w.get_analysis():
-      lem_tag = []
-      lem_tag.append(w_a.get_lemma())
-      lem_tag.append(w_a.get_tag())
-      info[w.get_form()] = lem_tag
-  
+      lem_tag.append((w_a.get_lemma(),w_a.get_tag()))
+    palabra_analisis =  (palabra,lem_tag)
+    info.append(palabra_analisis)
   return info
 
 # Funciones análisis
 def tokenizar(texto):
-  """
-    Tokenizador de Twokenizer
-
-    Recibe un texto en string y retorna una lista 
-    de tokens palabras.
-  """
   return ark_tokenize(texto)
 
-def pre_mf_analyze(listatokens):
-  """
-  :param lis: lista de strings
-  
-  Hace el casting de los elementos a <word> y si es una expresión
-  especial (emoticon, nickname, hashtag o url) le asigna una anotación
-  morfológica.
-  
-  :retorna: tupla de words list<word>
-  """
+def morfo_analyze(listatokens,full_analize=True):
   tokens = listatokens[:]
   re_emoticon = re.compile(emoticon)
   re_hashtag = re.compile(Hashtag)
@@ -147,19 +122,9 @@ def pre_mf_analyze(listatokens):
       taggear(tokens[i], "#")
     elif re_url.match(tk):
       taggear(tokens[i], "U")
-  return freeling.sentence(tuple(tokens))
-
-def analisis_morfologico(lword):
-  """
-  Recibe una tupla list<word>, aplica análisis morfológico, por cada
-  elemento retorna el elemento y una lista con sublistas de parejas
-  lema, tag
-  Ejemplo para toca:
-  [ "toca", [["tocar", "VMIP3S0"],["toca","NCFS000"],["tocar","VMM02S0"]] ]
-  """
-  sentencia = freeling.sentence(lword)
-  sentencia = f_mf.analyze(sentencia)
-
+  sentencia = freeling.sentence(tuple(tokens))
+  if full_analize:
+    sentencia = f_mf.analyze(sentencia)
   return sentencia
 
 

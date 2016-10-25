@@ -248,8 +248,11 @@ def interpretar(texto):
   categoria = texto[0]
   diccionario = EAGLES_CATEGORIAS[categoria]
   traduccion = ""
-  for i,letra in zip(range(1,len(texto)+1),texto):
-    traduccion += diccionario[str(i)+str(letra)] + " "
-
-  return traduccion
+  try:
+    for i,letra in zip(range(1,len(texto)+1),texto):
+      traduccion += diccionario[str(i)+str(letra)] + " "
+  except KeyError:
+    traduccion = "¿"+ texto +"?"
+  finally:
+    return traduccion
 
