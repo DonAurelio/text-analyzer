@@ -12,15 +12,17 @@
 {% for group in morfo_analisis_groups %}
 <div class="row">
   {% for palabra, analisis in group %}
-  <div class="col-sm-2">
-    <div class="row page-header">
-    <button type="button" class="btn btn-default navbar-btn">{{ palabra }}</button>
+  <div class="col-sm-2 ma-10">
+    <div class="row">
+    <p><b>{{ palabra }}</b></p>
+    <hr class="col-sm-1">
     </div>
     {% for a,b in analisis %}
-    <div class="row page-header">
+    <div class="row">
     <p>{{ a }}</p>
     <p>{{ b }}</p>
-    <p>{{ b | interpretag }}</p>
+    <p><small>{{ b | interpretag }}</small></p>
+    <hr class="col-sm-1">
     </div>
     {% endfor %}
   </div>
