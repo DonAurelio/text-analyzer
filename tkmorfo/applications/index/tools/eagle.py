@@ -76,7 +76,7 @@ EAGLES_NOMBRES = {
   #<--
   '7A':'Apreciativo',
   '7D':'Disminutivo'
-  '70':''
+  '70':'',
 }
 
 EAGLES_VERBOS = {
