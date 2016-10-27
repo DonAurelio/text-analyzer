@@ -18,7 +18,7 @@ class IndexView(TemplateView):
 
 		# Anaĺisis morfológico
 		morfo_analisis = tkmorfo.parse_sentence(tkmorfo.morfo_analyze(tokens))
-		group_len = 6
+		group_len = 7
 		morfo_analisis_groups = [ morfo_analisis[i:i+group_len] for i in range(0, len(morfo_analisis), group_len) ]
 		print "TOKENS",tokens
 		print "MORFO ANALISIS",morfo_analisis

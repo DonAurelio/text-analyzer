@@ -4,8 +4,7 @@ from twokenize import emoticon, Hashtag, AtMention, url
 from twokenize import tokenize as ark_tokenize
 import freeling
 import re
-
-#============================ Freling Initialization ================================
+#======================== Freling Initialization ===============================
 # Modify this line to be your FreeLing installation directory
 FREELINGDIR = "/usr";
 
@@ -35,42 +34,16 @@ f_mf.set_active_options(False, True, True, True,  # select which among created
                       True, True, False, True,  # submodules are to be used. 
                       True, True, True, True ); # default: all created submodules are used
 
-#============================ Freling Initialization ================================
+#======================== ./Freling Initialization =============================
 
 
-#============================ Descripción del proyecto ==============================
-# El procesamiento de lenguaje natural de textos comprende 3 etapas 
-# 1) Preprocesamiento: Consiste en normalizar el texto de entrada, en algunos casos 
-# se corrigen errores ortográficos, se eliminan espacios innecesarios y dependiendo 
-# del tipo de analisis que se desee hacer se le dá un significado alternativo a los 
-# emoticones, se elimian hash "#" haciendo que el resto del hash haga parte de la oración
-# tambien se modifican urls y nicknames. 
-# NOTA: Para este caso no se hace la etapa de preprocesado
-
-# 2) Segmentación de frases y palabras
-# Tras el preprocesado del texto ya se han normalizado algunos de los elementos que podián
-# complicar la identificación y división de frases y palabras, como la incorrecta colocación de 
-# signos de puntuación o la aparición de nombres de usuarios de twitter o hashtags, para la 
-# segmenación de oraciones, se usa la biblioteca nltk.
-# NOTA: Las estructuras de un parrafo son: 
-#   Sentencias o Oraciones (componentes del parrafo).
-#   Palabras hace parte de una sentencia u oración 
-# NLTK primero lleva a cabo la segmentación de oraciones y luego la segmentación de palabras 
-
-# 3) Análisis morfológico
-# Dada una oracion S compuesta por un conjunto de palabras Wi, y un conjunto de etiquetas 
-# T con etiquetas Ti, el proceso de análisis morfológico tambien conocido como etiquetación,
-# consiste en asignar a cada palabra de la oración su etiqueta correspondiente, creando una 
-# lista de tuplas (s,t) donde s partenece a S y t pertenece a T
-
-#============================ Descripción del proyecto ==============================
-
-# ALGORITMO PROPUESTO
+################################################################################
+# ALGORITMO
 """ 
-    Iterar el arreglo que devuelve TweetTokenizer (lista de strings) y cada palabra
-    a word usando freeling.word() al finalizar crear un list<word>
+    Iterar el arreglo que devuelve Twokenizer (lista de strings) y castear
+    cada palabra a word usando freeling.word(), al finalizar crear un list<word>
     
-    Hacer tag set_tag() de símbolos, nicknames, hashtags, urls y para
+    Hacer set_tag() de símbolos, nicknames, hashtags, urls y para
     cada uno setear lock_analysis() para que sean ignorados por el analyze()
 
     Convertir el list<word> a sentence, aplicar el análisis morfológico, 
@@ -78,20 +51,26 @@ f_mf.set_active_options(False, True, True, True,  # select which among created
     y mostrar
 
  """
+################################################################################
 
+#===============================================================================
 # Funciones auxiliares 
-def taggear(w,tag):
+def taggear(w, lemma, tag):
   """
-  A una palabra freeling "w" le asigna el "tag", lema="" y bloquea el
-  análisis respectivo
+  Asigna a una palabra "w" el tag y lema especificados y bloquea el
+  análisis de la palabra
   """
   analisis = freeling.analysis()
+  analisis.set_lemma(lemma)
   analisis.set_tag(tag)
-  analisis.set_lemma("")
   w.set_analysis(analisis)
   w.lock_analysis()
 
 def parse_sentence(sentencia):
+  """
+  Recibe una sentencia en formato freeling, retorna una estructura de
+  tuplas y listas con las palabras y su información morfológica
+  """
   info = []
   for w in sentencia:
     palabra = w.get_form()
@@ -102,6 +81,7 @@ def parse_sentence(sentencia):
     info.append(palabra_analisis)
   return info
 
+#===============================================================================
 # Funciones análisis
 def tokenizar(texto):
   return ark_tokenize(texto)
@@ -115,58 +95,15 @@ def morfo_analyze(listatokens,full_analize=True):
   for i, tk in enumerate(tokens):
     tokens[i] = freeling.word(tk)
     if re_emoticon.match(tk):
-      taggear(tokens[i], "E")
+      taggear(tokens[i],"","E")
     elif re_nickname.match(tk):
-      taggear(tokens[i], "@")
+      taggear(tokens[i],"","@")
     elif re_hashtag.match(tk):
-      taggear(tokens[i], "#")
+      taggear(tokens[i],"","#")
     elif re_url.match(tk):
-      taggear(tokens[i], "U")
+      taggear(tokens[i],"","U")
   sentencia = freeling.sentence(tuple(tokens))
   if full_analize:
     sentencia = f_mf.analyze(sentencia)
   return sentencia
-
-
-######################################################################
-
-######################################################################
-# Función para interacción externa
-
-def obtener_mf(texto):
-  """
-  Ejemplo para toca:
-  {"n_tokens": 1,
-  "tokens":["toca"]
-  "toca": [["tocar", "VMIP3S0"],["toca","NCFS000"],["tocar","VMM02S0"]] }
-  """
-  tokens = ark_tokenize(texto)
-  n_tokens = len(tokens)
-  result = analisis_morfologico(pre_mf_analyze(tokens))
-  print (result)
-
-######################################################################
-
-######################################################################
-if __name__ == '__main__':
-  mensaje = "El musico bajo toca el bajo"
-  mensaje1 = "Mi #Tbt hoy es con @MarcAnthony  y seguro les gustara quiero que continúen \
-  ustedes con la letra. Cuando nos volvamos a encontrar :)"
-  mensaje2 = "Por fin!! de nuevo en Twitter! =D se me daño mi celular pero ya tengo uno \
-  nuevo =D @rosariomeneses1 creo que es igual al tuyo #emoticones XD <3 ^_^!"
-  m_emojis = "Hola si =D entonces o.O 12:30 O.o (: jeje :v 1, 2, 3.5 1,2"
-
-
-  # Tokenizar con Twokenize
-  tokens = ark_tokenize(mensaje)
-  pre = pre_mf_analyze(tokens)
-  morfo = analisis_morfologico(pre)
-  print(pre)
-  print(tokens)
-  print(morfo)
-
-
-  #morfo = analisis_morfologico(pre)
-  #print(morfo)
-  
-######################################################################
+#===============================================================================
