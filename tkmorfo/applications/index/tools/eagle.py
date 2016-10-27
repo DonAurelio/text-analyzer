@@ -75,7 +75,7 @@ EAGLES_NOMBRES = {
   '60':'',
   #<--
   '7A':'Apreciativo',
-  '7D':'Disminutivo'
+  '7D':'Disminutivo',
   '70':'',
 }
 
@@ -182,11 +182,11 @@ EAGLES_NUMERALES = {
   '20':'',
 }
 
-EAGLES_NUMERALES = {
+EAGLES_FECHAS_HORAS = {
   '1W':'Fecha/Hora',
 }
 
-# borrar? ->
+#======= borrar? ->
 EAGLES_ABREVIATURAS = {
   '1Y':'Abreviatura'
 }
@@ -204,7 +204,7 @@ EAGLES_ARTICULOS = {
   '40':'',
   '50':''
 }
-# <- borrar?
+#======= <- borrar?
 
 ETIQUETA_EMOTICONES = {
   '1E':'Emoticón'
@@ -225,21 +225,23 @@ ETIQUETA_NICKNAME = {
 EAGLES_CATEGORIAS = {
   'A':EAGLES_ADJETIVOS,
   'R':EAGLES_ADVERBIOS,
-  'T':EAGLES_ARTICULOS,
   'D':EAGLES_DETERMINANTES,
   'N':EAGLES_NOMBRES,
   'V':EAGLES_VERBOS,
   'P':EAGLES_PRONOMBRES,
   'C':EAGLES_CONJUNCIONES,
-  'M':EAGLES_NUMERALES,
   'I':EAGLES_INTERJECCIONES,
-  'Y':EAGLES_ABREVIATURAS,
   'S':EAGLES_PREPOSICIONES,
   'F':EAGLES_SIGNOS_DE_PUNTUACION,
+  'Z':EAGLES_NUMERALES,
+  'W':EAGLES_FECHAS_HORAS,
   '@':ETIQUETA_NICKNAME,
   '#':ETIQUETA_HASHTAG,
   'U':ETIQUETA_URL,
-  'E':ETIQUETA_EMOTICONES
+  'E':ETIQUETA_EMOTICONES,
+
+  'T':EAGLES_ARTICULOS,
+  'Y':EAGLES_ABREVIATURAS,
 }
 
 def interpretar(texto):
