@@ -13,19 +13,12 @@ class IndexView(TemplateView):
 
 	def post(self,request,*args,**kwargs):
 		text = request.POST.get('text',None)
+		pre = False if request.POST.get('pre',None) else True
 		tokens = tkmorfo.tokenizar(text)
-		#pre_analisis = tkmorfo.parse_sentence(tkmorfo.pre_mf_analyze(tokens))
-
 		# Anaĺisis morfológico
-		morfo_analisis = tkmorfo.parse_sentence(tkmorfo.morfo_analyze(tokens))
-		group_len = 6
-		morfo_analisis_groups = [ morfo_analisis[i:i+group_len] for i in range(0, len(morfo_analisis), group_len) ]
-		print "TOKENS",tokens
-		print "MORFO ANALISIS",morfo_analisis
-		print "MORFO ANALISIS GROUPS", morfo_analisis_groups
-		
+		morfo_analisis = tkmorfo.parse_sentence(tkmorfo.morfo_analyze(listatokens=tokens,full_analize=pre))
 		template = loader.get_template('index/includes/result.html')
-		context = {'tokens':tokens,'morfo_analisis_groups':morfo_analisis_groups }
+		context = {'tokens':tokens,'morfo_analisis':morfo_analisis }
 		html = template.render(context)
 
 		# Si el campo de texto está vacio entonces se retorna false

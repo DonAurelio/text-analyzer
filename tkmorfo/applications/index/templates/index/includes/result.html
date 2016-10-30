@@ -5,28 +5,25 @@
 <kbd>{{ token }}</kbd> 
 {% endfor %}
 
-<div class="page-header">
+<br>
 <h3>Análisis Morfológico</h3>
-</div>
 
-{% for group in morfo_analisis_groups %}
-<div class="row">
-  {% for palabra, analisis in group %}
-  <div class="col-sm-2 ma-10">
-    <div class="row">
-    <p><b>{{ palabra }}</b></p>
-    <hr class="col-sm-1">
-    </div>
-    {% for a,b in analisis %}
-    <div class="row">
-    <p>{{ a }}</p>
-    <p>{{ b }}</p>
-    <p><small>{{ b | interpretag }}</small></p>
-    <hr class="col-sm-1">
-    </div>
-    {% endfor %}
-  </div>
-  {% endfor %}
-</div>
-{% endfor %}
+<div class="table-responsive">
+  <table class="table">
+    <tr>
+      {% for palabra, analisis in morfo_analisis %}
+      <td>
+        <p><b>{{ palabra }}</b></p>
+        <ul class="list-unstyled">
+          {% for a,b in analisis %}
+          <li class="text-primary">{{ a }}</li>
+          <li class="text-success">{{ b }}</li>
+          <li>{{ b | interpretag }}</li>
+          <br>
+          {% endfor %}
+        </ul>
+      </td>
+      {% endfor %}
+    </tr>
+  </table>
 </div>
