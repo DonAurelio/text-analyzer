@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from django import template
-from applications.index.tools import eagle
+from applications.morfo.tools import eagle
 register = template.Library()
 
 @register.filter(name='interpretag')

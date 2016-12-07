@@ -20,5 +20,6 @@ from django.conf.urls import include
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^',include('applications.index.urls',namespace='index')),
+    url(r'^',include('applications.morfo.urls',namespace='morfo')),
+    url(r'^',include('applications.textparser.urls',namespace='parser')),
 ]

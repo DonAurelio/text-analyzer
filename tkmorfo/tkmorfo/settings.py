@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'applications.index.apps.IndexConfig',
+    'applications.morfo.apps.MorfoConfig',
+    'applications.textparser.apps.TextparserConfig',
 ]
 
 MIDDLEWARE_CLASSES = [
