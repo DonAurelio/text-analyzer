@@ -71,8 +71,8 @@ def parser_stanford(sentences):
 
 def parser_bikel(sentences):
 	"""
-	Recibe un conjunto de sentencias, aplica el parser de stanford
-	y retorna el árbol sintáctico en bracketing
+	Recibe un conjunto de sentencias, aplica el parser de bikel
+	y retorna el árbol sintáctico
 	"""
 	pass
 	
@@ -88,7 +88,6 @@ def parser_output(parser, inputfile, outputfile):
 	with open(outputfile, 'w') as f:
 		for t in list(trees):
 	 		f.write(str(list(t)[0]).replace("ROOT", "")+"\n")
-
 
 #===============================================================================
 
@@ -134,7 +133,6 @@ def main():
 	Comparar archivos seleccionados con 00-gold (parseval)
 	****************************************************************************
 	"""
-
 	
 if __name__ == "__main__":
 	#main()
