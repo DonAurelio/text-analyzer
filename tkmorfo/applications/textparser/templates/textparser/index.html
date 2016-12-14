@@ -1,46 +1,82 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block content %}
-<div class="page-header">
-<h1>Hola</h1>
-</div>
-
 <div class="row">
 <form action="{% url 'parser:analysis' %}"  method="POST">{% csrf_token %}
     <div class="col-sm-8 blog-main">
-      <div class="form-group">
-          <textarea id="text" name="text" class="form-control" rows="3" maxlength="140" placeholder="Escriba el texto aqui ..."></textarea>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span> Texto a analizar
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+              <textarea id="text" name="text" class="form-control" rows="3" maxlength="140" placeholder="Escriba el texto aqui ..."></textarea>
+          </div>
+          <div class="form-group">
+              <div id="alert"></div>
+          </div>
+          <div class="btn-group pull-right" role="group" aria-label="...">
+            <button id="btn-limpiar" type="submit" class="btn btn-primary">Limpiar</button>
+            <button id="btn-analizar" type="submit" class="btn btn-success">Analizar</button>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-          <div id="alert"></div>
-      </div>
-      <button id="btn-analizar" type="submit" class="btn btn-primary pull-right">Analizar</button>
+      <div id="result"></div>
     </div>
     <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
       <div class="sidebar-module sidebar-module-inset">
-        <h4>Ejemplos</h4>
-        <ol class="list-unstyled">
-          <li><a id="e1" href="#">Ejemplo 1</a></li>
-          <li><a id="e2" href="#">Ejemplo 2</a></li>
-        </ol>
+        <h4>Análisis Sintactico Probabilístico</h4>
+        <div class="panel panel-default">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Selecionar Modelo
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" name="radio-modelo" value="Bikel" >Bikel</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="radio-modelo" value="Standfor" >Standfor</label>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="sidebar-module sidebar-module-inset">
-        <h4>Opciones</h4>
-        <ol class="list-unstyled">
-          <li>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" name="pre" value="pre">
-                Sólo pre análisis
-              </label>
+        <div class="panel panel-warning">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Seleccionar Modo
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" name="radio-modo" value="Analisis" >Analisis</label>
             </div>
-          </li>
-        </ol>
+            <div class="radio">
+              <label><input type="radio" name="radio-modo" value="Rendimiento" >Rendimiento del modelo</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-module sidebar-module-inset">
+        <h4>Archivos de Prueba</h4>
+        <div class="panel panel-success">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-object-align-bottom" aria-hidden="true"></span> Selecionar Test
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" name="radio-test" value="Archivo1" >Archivo 1</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="radio-test" value="Archivo2" >Archivo 2</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div><!-- /.blog-sidebar -->
   </form>
 </div>
-<div id="result"></div>
 {% endblock %}
 {% block js %}
 {{ block.super }}
@@ -48,14 +84,12 @@
 <!-- Including jQuery Form plugin -->
 <script src="{% static 'jquery/jquery.form.min.js' %}"></script>
 <script type="text/javascript">
-  $("#e1").click(function(event){
+  $("#btn-limpiar").click(function(event){
     event.preventDefault();
-    $("#text").val("Mi #Tbt hoy es con @MarcAnthony  y seguro les gustara quiero que continúen ustedes con la letra. Cuando nos volvamos a encontrar :)");
+    $("#text").val("");
+    $("#result").html("");
   });
-  $("#e2").click(function(event){
-    event.preventDefault();
-    $("#text").val('.__. Por fin!! de nuevo en Twitter! =D se me daño mi celular pero ya tengo uno nuevo =D @rosariomeneses1 creo que es igual al tuyo #emoticones XD <3 ^_^!" =DD  (:');
-  });
+
   /* submit del formulario */
   $("#btn-analizar").click(function(event){
       event.preventDefault();
