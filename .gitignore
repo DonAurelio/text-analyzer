@@ -86,3 +86,10 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# folders external software
+tkmorfo/applications/textparser/tools/helpers/dbparser
+tkmorfo/applications/textparser/tools/helpers/stanford-parser-full-2015-12-09
+tkmorfo/applications/textparser/tools/helpers/stanford-postagger-2015-12-09
+
+.pyc
