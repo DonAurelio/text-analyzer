@@ -7,16 +7,18 @@ from nltk.tag import StanfordPOSTagger
 from nltk import sent_tokenize
 from os.path import dirname
 from os.path import abspath
+from os import popen
 
 #===============================================================================
+abs_path = dirname(abspath(__file__))
+
 # STANFORD TOOLS
 
-abs_path = dirname(abspath(__file__))
+# paths
 stanford_pos_dir = abs_path + '/stanford-postagger-2015-12-09/'
 postag_modelfile = stanford_pos_dir+'models/english-bidirectional-distsim.tagger'
 postag_jar = stanford_pos_dir + 'stanford-postagger.jar'
 stanford_parser_dir = abs_path + '/stanford-parser-full-2015-12-09/'
-# parser_eng_model = stanford_parser_dir+'edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz'
 parser_eng_model = stanford_parser_dir+'edu.stanford.nlp.models.lexparser/englishPCFG.ser.gz'
 parser_models_jar = stanford_parser_dir + "stanford-parser-3.6.0-models.jar"
 parser_jar = stanford_parser_dir + "stanford-parser.jar"
@@ -30,6 +32,12 @@ st_tknzr  = StanfordTokenizer(path_to_jar = postag_jar)
 st_parser = StanfordParser(model_path = parser_eng_model,
 						   path_to_models_jar = parser_models_jar,
 						   path_to_jar = parser_jar)
+
+# BIKEL
+
+# paths
+bikel_parser_path = abs_path + '/parse 400'
+"../settings/collins.properties ../../bikel/wsj-02-21.obj.gz ../../bikel/input-bikel"
 #===============================================================================
 
 #===============================================================================
@@ -74,7 +82,9 @@ def parser_bikel(sentences):
 	Recibe un conjunto de sentencias, aplica el parser de bikel
 	y retorna el árbol sintáctico
 	"""
-	pass
+	comand = 
+	retvalue = popen().readlines()
+	print retvalue
 	
 def parser_output(parser, inputfile, outputfile):
 	"""
