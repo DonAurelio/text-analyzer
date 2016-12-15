@@ -8,3 +8,6 @@ This projects is dedicated to an University Assignment related with Natural Lang
 More information, please check the wiki of this project.
 
 
+http://ignitersworld.com/lab/imageViewer.html
+http://www.howtogeek.com/109369/how-to-quickly-resize-convert-modify-images-from-the-linux-terminal/
+https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-docker-container/
