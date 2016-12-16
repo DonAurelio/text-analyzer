@@ -4,7 +4,7 @@ from django.template import loader
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-
+from tools.textparsers import stanford_parser
 
 class ParserView(TemplateView):
 	template_name = 'textparser/index.html'
@@ -19,7 +19,7 @@ class ParserView(TemplateView):
 		print "Data:", text, model, mode, test_file_name
 
 		# Text Processing
-		# split_sentence(text)
+		print stanford_parser(text)
 
 		# Template Rendetization
 		template = loader.get_template('textparser/includes/result_analisys.html')

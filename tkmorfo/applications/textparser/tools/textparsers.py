@@ -1,14 +1,25 @@
 # -*- coding: utf-8 -*-
-# import nltk
-# nltk.download('punkt')
+import nltk
+nltk.download('punkt')
 from nltk import sent_tokenize
+from nltk import word_tokenize
 from nltk import Tree
 from helpers.utils import *
 #===============================================================================
 # functions
 
 def stanford_parser(sentences):
-	return list(list( st_parser.raw_parse_sents(sent_tokenize(sentences)) ))
+	"""
+	* sent_tokenize is a text segmenter, it takes str and returns list(str), where each str is a sentence.
+	* st_parser.raw_parse_sents is a StanforParser, it takes list(list(str)) and returns iter(iter(Tree)).
+	and returns a parse tree.
+	"""
+	# tokenized_sentences = sent_tokenize(sentences)
+	# tokenized_sentences_words = [word_tokenize(t) for t in sent_tokenize(sentences)]
+	# parsed_sentences = st_parser.raw_parse_sents(tokenized_sentences)
+	# print "Tokenized", parsed_sentences
+
+	return list(list( st_parser.raw_parse_sents(sent_tokenize(sentences[:2])) ))
 
 def stanford_parser_outfile(inputfile, outputfile):
 	with open(inputfile, 'r') as f:

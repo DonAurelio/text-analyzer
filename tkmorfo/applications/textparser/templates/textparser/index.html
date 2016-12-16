@@ -10,7 +10,7 @@
         </div>
         <div class="panel-body">
           <div class="form-group">
-              <textarea id="text" name="text" class="form-control" rows="3" maxlength="140" placeholder="Escriba el texto aqui ..."></textarea>
+              <textarea id="text" name="text" class="form-control" rows="3" placeholder="Escriba el texto aqui ..."></textarea>
           </div>
           <div class="form-group">
               <div id="alert"></div>
@@ -88,6 +88,7 @@
     event.preventDefault();
     $("#text").val("");
     $("#result").html("");
+    $("#alert").html("");
   });
 
   /* submit del formulario */
