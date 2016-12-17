@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from tools.textparsers import stanford_parser, to_raw_tree
+from tools.parsetreeimage import save_image_from_tree
 
 class ParserView(TemplateView):
 	template_name = 'textparser/index.html'
@@ -21,11 +22,16 @@ class ParserView(TemplateView):
 		# Text Processing
 		parse_trees = stanford_parser(text)
 		raw_parse_trees = [to_raw_tree(tree) for tree in parse_trees]
+		paths_to_tree_images = []
+		for i,raw_tree in enumerate(raw_parse_trees):
+			paths_to_tree_images.append(save_image_from_tree(
+				raw_tree=raw_tree,name='s%d'% i,type='standfor'))
 
 		# Template Rendetization
 		template = loader.get_template('textparser/includes/result_analisys.html')
 		context = {
-			'raw_parse_trees':raw_parse_trees
+			'raw_parse_trees':raw_parse_trees,
+			'paths_to_tree_images':paths_to_tree_images
 		}
 		html = template.render(context)
 

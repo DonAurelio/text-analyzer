@@ -56,27 +56,27 @@
         <span class="pull-right">
             <!-- Tabs -->
             <ul class="nav panel-tabs">
-                <li class="active"><a href="#tab1" data-toggle="tab">Tab 1</a></li>
-                <li><a href="#tab2" data-toggle="tab">Tab 2</a></li>
-                <li><a href="#tab3" data-toggle="tab">Tab 3</a></li>
-                <li><a href="#tab4" data-toggle="tab">Tab 4</a></li>
+                {% for path in paths_to_tree_images %}
+                {% if forloop.counter == 1 %}
+                <li class="active"><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{ forloop.counter }}</a></li>
+                {% else %}
+                <li><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{ forloop.counter }}</a></li>
+                {% endif %}
+                {% endfor %}
             </ul>
         </span>
     </div>
     <div class="panel-body">
         <div class="tab-content">
-            <div class="tab-pane active" id="tab1">
-                <img src="https://i.ytimg.com/vi/5KuD41e2HS0/maxresdefault.jpg" width="100%" height="100%" alt="" class="pannable-image">
+            {% for path in paths_to_tree_images %}
+            {% if forloop.counter == 1 %}
+            <div class="tab-pane active" id="tab{{ forloop.counter }}">
+            {% else %}
+            <div class="tab-pane" id="tab{{ forloop.counter }}">
+            {% endif %}
+                <img src="{{ path }}" width="100%" height="100%" alt="" class="pannable-image">
             </div>
-            <div class="tab-pane" id="tab2">
-                
-            </div>
-            <div class="tab-pane" id="tab3">
-                
-            </div>
-            <div class="tab-pane" id="tab4">
-                
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
