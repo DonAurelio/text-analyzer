@@ -27,21 +27,21 @@ parseval.tar.gz
 
 # Run graphical applications into a contaner
 
->> install the python-tk
+* install the python-tk
 
->> apt-get update
+* apt-get update
 
->> apt-get install xvfb
+* apt-get install xvfb
 
->> Xvfb :1 -screen 0 1024x768x16 &> xvfb.log  &
+* Xvfb :1 -screen 0 1024x768x16 &> xvfb.log  &
 
->> ps aux | grep X
+* ps aux | grep X
 
->> DISPLAY=:1.0
+* DISPLAY=:1.0
 
->> export DISPLAY
+* export DISPLAY
 
->> apt-get install imagemagick
+* apt-get install imagemagick
 
 http://www.howtogeek.com/109369/how-to-quickly-resize-convert-modify-images-from-the-linux-terminal/
 https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-docker-container/
