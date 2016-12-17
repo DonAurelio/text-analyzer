@@ -15,7 +15,7 @@ stanford_pos_dir = abs_path + '/stanford-postagger-2015-12-09/'
 postag_modelfile = stanford_pos_dir+'models/english-bidirectional-distsim.tagger'
 postag_jar = stanford_pos_dir + 'stanford-postagger.jar'
 stanford_parser_dir = abs_path + '/stanford-parser-full-2015-12-09/'
-parser_eng_model = stanford_parser_dir+'edu.stanford.nlp.models.lexparser/englishPCFG.ser.gz'
+parser_eng_model = stanford_parser_dir+'edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz'
 parser_models_jar = stanford_parser_dir + "stanford-parser-3.6.0-models.jar"
 parser_jar = stanford_parser_dir + "stanford-parser.jar"
 

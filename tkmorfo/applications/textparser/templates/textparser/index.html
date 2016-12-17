@@ -25,6 +25,23 @@
     </div>
     <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
       <div class="sidebar-module sidebar-module-inset">
+        <h4>Ejemplos</h4>
+        <div class="panel panel-primary">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-text-size" aria-hidden="true"></span> New York Times
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" id="example1" name="radio-example" value="example1" >Ejemplo 1</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" id="example2" name="radio-example" value="example2" >Ejemplo 2</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-module sidebar-module-inset">
         <h4>Análisis Sintactico Probabilístico</h4>
         <div class="panel panel-default">
           <!-- Default panel contents -->
@@ -58,7 +75,7 @@
         </div>
       </div>
       <div class="sidebar-module sidebar-module-inset">
-        <h4>Archivos de Prueba</h4>
+        <h4>Presición y Recall</h4>
         <div class="panel panel-success">
           <!-- Default panel contents -->
           <div class="panel-heading">
@@ -84,11 +101,22 @@
 <!-- Including jQuery Form plugin -->
 <script src="{% static 'jquery/jquery.form.min.js' %}"></script>
 <script type="text/javascript">
+  /* Clear fields */
   $("#btn-limpiar").click(function(event){
     event.preventDefault();
     $("#text").val("");
     $("#result").html("");
     $("#alert").html("");
+  });
+
+  /* Examples from new youk times */
+  $("#example1").click(function(event){
+    event.preventDefault();
+    $("#text").val("President Obama said he refrained from aggressive public retaliation against Moscow for hacking the D.N.C. before the election because he did not want it to be seen as unfair meddling.");
+  });
+  $("#example2").click(function(event){
+    event.preventDefault();
+    $("#text").val('City officials had decided to allow the state to take the white-tailed buck upstate. But before it could be relocated, it died from stress while in an animal shelter.');
   });
 
   /* submit del formulario */

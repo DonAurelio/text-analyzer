@@ -4,7 +4,6 @@
 <!-- or <script src="{% static 'jquery/jquery.min.js' %}"></script> -->
 <script src="{% static 'ImageViewer-master/imageviewer.js' %}"></script>
 
-
 <div class="panel panel-default">
   <div class="panel-heading">Preprocesamiento</div>
   <div class="panel-body">
@@ -17,9 +16,43 @@
   </div>
 </div>
 <!-- Reference http://bootsnipp.com/snippets/featured/panels-with-nav-tabs -->
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">Raw Arbol Sintáctico</h3>
+        <span class="pull-right">
+            <!-- Tabs -->
+            <ul class="nav panel-tabs">
+                {% for raw_tree in raw_parse_trees %}
+                {% if forloop.counter == 1 %}
+                <li class="active"><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{ forloop.counter }}</a></li>
+                {% else %}
+                <li><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{ forloop.counter }}</a></li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </span>
+    </div>
+    <div class="panel-body">
+        <div class="tab-content">
+            {% for raw_tree in raw_parse_trees %}
+            {% if forloop.counter == 1 %}
+            <div class="tab-pane active" id="tab{{ forloop.counter }}">
+            {% else %}
+            <div class="tab-pane" id="tab{{ forloop.counter }}">
+            {% endif %}
+                <textarea class="form-control" rows="20">
+                {{ raw_tree }}
+                </textarea>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Reference http://bootsnipp.com/snippets/featured/panels-with-nav-tabs -->
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Arbol Sintáctico</h3>
+        <h3 class="panel-title">Imagen Arbol Sintáctico</h3>
         <span class="pull-right">
             <!-- Tabs -->
             <ul class="nav panel-tabs">

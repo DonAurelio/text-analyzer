@@ -4,7 +4,7 @@ from django.template import loader
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from tools.textparsers import stanford_parser
+from tools.textparsers import stanford_parser, to_raw_tree
 
 class ParserView(TemplateView):
 	template_name = 'textparser/index.html'
@@ -19,11 +19,14 @@ class ParserView(TemplateView):
 		print "Data:", text, model, mode, test_file_name
 
 		# Text Processing
-		print stanford_parser(text)
+		parse_trees = stanford_parser(text)
+		raw_parse_trees = [to_raw_tree(tree) for tree in parse_trees]
 
 		# Template Rendetization
 		template = loader.get_template('textparser/includes/result_analisys.html')
-		context = {}
+		context = {
+			'raw_parse_trees':raw_parse_trees
+		}
 		html = template.render(context)
 
 		# Text validations, if the text field is empty, we return and error or

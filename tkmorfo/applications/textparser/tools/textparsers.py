@@ -8,18 +8,16 @@ from helpers.utils import *
 #===============================================================================
 # functions
 
-def stanford_parser(sentences):
+def stanford_parser(text):
 	"""
 	* sent_tokenize is a text segmenter, it takes str and returns list(str), where each str is a sentence.
-	* st_parser.raw_parse_sents is a StanforParser, it takes list(list(str)) and returns iter(iter(Tree)).
-	and returns a parse tree.
+	* st_parser.raw_parse_sents is a StanforParser, it takes list(list(str)) and returns and returns a parse tree 
+	iter(iter(Tree)).
 	"""
-	# tokenized_sentences = sent_tokenize(sentences)
-	# tokenized_sentences_words = [word_tokenize(t) for t in sent_tokenize(sentences)]
-	# parsed_sentences = st_parser.raw_parse_sents(tokenized_sentences)
-	# print "Tokenized", parsed_sentences
+	return list(list( st_parser.raw_parse_sents(sent_tokenize(text)) ))
 
-	return list(list( st_parser.raw_parse_sents(sent_tokenize(sentences[:2])) ))
+def to_raw_tree(tree):
+	return str(list(tree)[0]).replace("ROOT", "")
 
 def stanford_parser_outfile(inputfile, outputfile):
 	with open(inputfile, 'r') as f:
