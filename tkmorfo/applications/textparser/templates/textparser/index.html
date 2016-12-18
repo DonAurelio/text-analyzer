@@ -2,11 +2,12 @@
 {% load staticfiles %}
 {% block content %}
 <div class="row">
-<form action="{% url 'parser:analysis' %}"  method="POST">{% csrf_token %}
+<form action="{% url 'parser:analysis' %}"  method="POST" enctype="multipart/form-data">{% csrf_token %}
     <div class="col-sm-10 blog-main">
-      <div class="panel panel-primary">
+
+      <div id="div-analysis" class="panel panel-primary">
         <div class="panel-heading">
-          <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span> Texto a analizar
+          <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span> Análisis
         </div>
         <div class="panel-body">
           <div class="form-group">
@@ -16,17 +17,66 @@
               <div id="alert"></div>
           </div>
           <div class="btn-group pull-right" role="group" aria-label="...">
-            <button id="btn-limpiar" type="submit" class="btn btn-primary">Limpiar</button>
+            <button id="btn-limpiar-analysis" type="submit" class="btn btn-primary">Limpiar</button>
             <button id="btn-analizar" type="submit" class="btn btn-success">Analizar</button>
           </div>
         </div>
       </div>
+
+      <div id="div-test" class="panel panel-warning">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Precisión y Recall
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="input-group">
+                  <span class="input-group-addon" id="sizing-addon1">Raw</span>
+                  <input type="file" name="rawfile" class="form-control" >
+                </div><!-- /input-group -->
+              </div><!-- /.col-lg-6 -->
+              <div class="col-lg-6">
+                <div class="input-group">
+                  <span class="input-group-addon" id="sizing-addon1">Gold</span>
+                  <input type="file" name="goldfile" class="form-control">
+                </div><!-- /input-group -->
+              </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+          </div>
+          <div class="form-group">
+              <div id="alert"></div>
+          </div>
+          <div class="btn-group pull-right" role="group" aria-label="...">
+            <button id="btn-limpiar-test" type="submit" class="btn btn-primary">Limpiar</button>
+            <button id="btn-analizar" type="submit" class="btn btn-success">Iniciar</button>
+          </div>
+        </div>
+      </div>
+
       <div id="result"></div>
     </div>
     <div class="col-sm-2 blog-sidebar">
       <div class="sidebar-module sidebar-module-inset">
-        <!-- <h4>Ejemplos</h4> -->
+        <!-- <h4>Análisis Sintactico Probabilístico</h4> -->
         <div class="panel panel-primary">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-object-align-bottom" aria-hidden="true"></span> Modo
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" id="mode-analysis" checked="checked" name="radio-modo" value="Bikel" >Análisis</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" id="mode-test" name="radio-modo" value="Standfor" >Test</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-module sidebar-module-inset">
+        <!-- <h4>Ejemplos</h4> -->
+        <div class="panel panel-warning">
           <!-- Default panel contents -->
           <div class="panel-heading">
             <span class="glyphicon glyphicon-text-size" aria-hidden="true"></span> New York Times
@@ -58,23 +108,6 @@
           </div>
         </div>
       </div>
-      <div class="sidebar-module sidebar-module-inset">
-        <!-- <h4>Presición y Recall</h4> -->
-        <div class="panel panel-warning">
-          <!-- Default panel contents -->
-          <div class="panel-heading">
-            <span class="glyphicon glyphicon-object-align-bottom" aria-hidden="true"></span> Test
-          </div>
-          <div class="panel-body">
-            <div class="radio">
-              <label><input type="radio" name="radio-test" value="Archivo1" >Archivo 1</label>
-            </div>
-            <div class="radio">
-              <label><input type="radio" name="radio-test" value="Archivo2" >Archivo 2</label>
-            </div>
-          </div>
-        </div>
-      </div>
     </div><!-- /.blog-sidebar -->
   </form>
 </div>
@@ -85,10 +118,32 @@
 <!-- Including jQuery Form plugin -->
 <script src="{% static 'jquery/jquery.form.min.js' %}"></script>
 <script type="text/javascript">
+  /* Mode selection */
+  $("#div-analysis").show();
+  $("#div-test").hide();
+
+  $("#mode-analysis").click(function(event){
+    $("#div-analysis").show();
+    $("#div-test").hide();
+  });
+
+  $("#mode-test").click(function(event){
+    $("#div-analysis").hide();
+    $("#div-test").show();
+  });
+
   /* Clear fields */
-  $("#btn-limpiar").click(function(event){
+  $("#btn-limpiar-analysis").click(function(event){
     event.preventDefault();
     $("#text").val("");
+    $("#result").html("");
+    $("#alert").html("");
+  });
+
+  $("#btn-limpiar-test").click(function(event){
+    event.preventDefault();
+    $("#rawfile").val("");
+    $("#goldfile").val("");
     $("#result").html("");
     $("#alert").html("");
   });
