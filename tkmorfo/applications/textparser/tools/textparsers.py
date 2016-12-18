@@ -77,6 +77,9 @@ def get_raw_files_list():
 	files.remove('.gitignore')
 	return files
 
+def parseval(raw_file_name):
+	raw_file_path = abs_path + '/00-raw/' + raw_file_name
+	gold_file_path = abs_path + '/00/' + raw_file_name + '.mrg'
 	
 #===============================================================================
 
