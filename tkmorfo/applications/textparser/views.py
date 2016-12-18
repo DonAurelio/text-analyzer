@@ -6,20 +6,26 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from tools.textparsers import stanford_parser
 from tools.textparsers import raw_tag, to_bikel_format, bikel_parser
+from tools.textparsers import get_raw_files_list
 from tools.parsetreeimage import save_image_from_tree
 
 class ParserView(TemplateView):
 	template_name = 'textparser/index.html'
 
+	def get_context_data(self,**kwargs):
+		context = super(ParserView,self).get_context_data(**kwargs)
+		context['raw_files'] = get_raw_files_list()
+		print "RAW FILES", context['raw_files']
+		return context
+
 	def post(self,request,*args,**kwargs):
 		text = request.POST.get('text',None)
 		mode = request.POST.get('radio-modo',None)
 		model = request.POST.get('radio-modelo',None)
-		rawfile = request.FILES.get('rawfile',None)
-		goldfile = request.FILES.get('goldfile',None)
+		rawfile = request.POST.get('rawfile',None)
 		
 		# Options given by the user throut the template
-		print "Form Data:", text, mode, model, rawfile, goldfile
+		print "Form Data:", text, mode, model, rawfile
 
 		# Text Processing
 		parse_trees = None

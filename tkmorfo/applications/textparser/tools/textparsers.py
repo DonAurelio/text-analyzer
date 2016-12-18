@@ -71,6 +71,12 @@ def bikel_parser_outfile(inputfile):
 	cmd=bk_parser_path+" 400 "+bk_settings+" "+bk_parser_model+" "+temp_file
 	os.popen(cmd).read()
 	os.remove(temp_file)
+
+def get_raw_files_list():
+	files = list(os.walk(abs_path + '/00-raw/'))[0][2]
+	files.remove('.gitignore')
+	return files
+
 	
 #===============================================================================
 

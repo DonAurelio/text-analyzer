@@ -33,13 +33,11 @@
               <div class="col-lg-6">
                 <div class="input-group">
                   <span class="input-group-addon" id="sizing-addon1">Raw</span>
-                  <input type="file" name="rawfile" class="form-control" >
-                </div><!-- /input-group -->
-              </div><!-- /.col-lg-6 -->
-              <div class="col-lg-6">
-                <div class="input-group">
-                  <span class="input-group-addon" id="sizing-addon1">Gold</span>
-                  <input type="file" name="goldfile" class="form-control">
+                  <select id="department" name="rawfile" class="form-control">
+                      {% for raw_file in raw_files %}
+                      <option value="{{ raw_file }}">{{ raw_file }}</option>
+                      {% endfor %}
+                  </select>
                 </div><!-- /input-group -->
               </div><!-- /.col-lg-6 -->
             </div><!-- /.row -->
@@ -49,7 +47,7 @@
           </div>
           <div class="btn-group pull-right" role="group" aria-label="...">
             <button id="btn-limpiar-test" type="submit" class="btn btn-primary">Limpiar</button>
-            <button id="btn-analizar" type="submit" class="btn btn-success">Iniciar</button>
+            <button id="btn-test" type="submit" class="btn btn-success">Iniciar</button>
           </div>
         </div>
       </div>
@@ -164,9 +162,12 @@
     });
 
     /* submit del formulario */
-    $("#btn-analizar").click(function(event){
+    var $form = $("form");
+    $("#btn-analizar").click(submit);
+    $("#btn-test").click(submit);
+
+    function submit(event){
         event.preventDefault();
-        var $form = $("form");
         $form.ajaxSubmit({
             url: $form.attr('action'),
             dataType: 'json',
@@ -183,7 +184,7 @@
             },
             error: error
         });
-    });
+    }
 
   /* Aviso de error  */
   var error = function (data) {
