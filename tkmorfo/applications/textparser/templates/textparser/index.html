@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block content %}
 <div class="row">
-<form action="{% url 'parser:analysis' %}"  method="POST" enctype="multipart/form-data">{% csrf_token %}
+<form action="{% url 'parser:analysis' %}"  method="POST">{% csrf_token %}
     <div class="col-sm-10 blog-main">
 
       <div id="div-analysis" class="panel panel-primary">
@@ -118,78 +118,80 @@
 <!-- Including jQuery Form plugin -->
 <script src="{% static 'jquery/jquery.form.min.js' %}"></script>
 <script type="text/javascript">
-  /* Mode selection */
-  $("#div-analysis").show();
-  $("#examples").show();
-  $("#div-test").hide();
-
-
-  $("#mode-analysis").click(function(event){
+  $( document ).ready(function() {
+    /* Mode selection */
     $("#div-analysis").show();
     $("#examples").show();
     $("#div-test").hide();
-  });
 
-  $("#mode-test").click(function(event){
-    $("#div-analysis").hide();
-    $("#examples").hide();
-    $("#div-test").show();
-  });
 
-  /* Clear fields */
-  $("#btn-limpiar-analysis").click(function(event){
-    event.preventDefault();
-    $("#text").val("");
-    $("#result").html("");
-    $("#alert").html("");
-  });
+    $("#mode-analysis").click(function(event){
+      $("#div-analysis").show();
+      $("#examples").show();
+      $("#div-test").hide();
+    });
 
-  $("#btn-limpiar-test").click(function(event){
-    event.preventDefault();
-    $("#rawfile").val("");
-    $("#goldfile").val("");
-    $("#result").html("");
-    $("#alert").html("");
-  });
+    $("#mode-test").click(function(event){
+      $("#div-analysis").hide();
+      $("#examples").hide();
+      $("#div-test").show();
+    });
 
-  /* Examples from new youk times */
-  $("#example1").click(function(event){
-    event.preventDefault();
-    $("#text").val("President Obama said he refrained from aggressive public retaliation against Moscow for hacking the D.N.C. before the election because he did not want it to be seen as unfair meddling.");
-  });
-  $("#example2").click(function(event){
-    event.preventDefault();
-    $("#text").val('City officials had decided to allow the state to take the white-tailed buck upstate. But before it could be relocated, it died from stress while in an animal shelter.');
-  });
-
-  /* submit del formulario */
-  $("#btn-analizar").click(function(event){
+    /* Clear fields */
+    $("#btn-limpiar-analysis").click(function(event){
       event.preventDefault();
-      var $form = $("form");
-      $form.ajaxSubmit({
-          url: $form.attr('action'),
-          dataType: 'json',
-          success: function(response, status, xhr, $form) {
-              if(response.status==true){
-                $("#result").html(response.html);
-                $("#alert").empty();
-              }else{
-                    var html = '<div class="alert alert-warning" role="alert"> \
-                    <strong>Oh!</strong> Debe diligenciar bien el campo de texto.\
-                    </div>';
-                  $("#alert").html(html);
-              };
-          },
-          error: error
-      });
-  });
+      $("#text").val("");
+      $("#result").html("");
+      $("#alert").html("");
+    });
 
-/* Aviso de error  */
-var error = function (data) {
-    var html = '<div class="alert alert-danger" role="alert"> \
-                <strong>Oh!</strong> Ha ocurrido un error en el servidor.\
-                </div>';
-    $("#alert").html(html);
-}
+    $("#btn-limpiar-test").click(function(event){
+      event.preventDefault();
+      $("#rawfile").val("");
+      $("#goldfile").val("");
+      $("#result").html("");
+      $("#alert").html("");
+    });
+
+    /* Examples from new youk times */
+    $("#example1").click(function(event){
+      event.preventDefault();
+      $("#text").val("President Obama said he refrained from aggressive public retaliation against Moscow for hacking the D.N.C. before the election because he did not want it to be seen as unfair meddling.");
+    });
+    $("#example2").click(function(event){
+      event.preventDefault();
+      $("#text").val('City officials had decided to allow the state to take the white-tailed buck upstate. But before it could be relocated, it died from stress while in an animal shelter.');
+    });
+
+    /* submit del formulario */
+    $("#btn-analizar").click(function(event){
+        event.preventDefault();
+        var $form = $("form");
+        $form.ajaxSubmit({
+            url: $form.attr('action'),
+            dataType: 'json',
+            success: function(response, status, xhr, $form) {
+                if(response.status==true){
+                  $("#result").html(response.html);
+                  $("#alert").empty();
+                }else{
+                      var html = '<div class="alert alert-warning" role="alert"> \
+                      <strong>Oh!</strong> Debe diligenciar bien el campo de texto.\
+                      </div>';
+                    $("#alert").html(html);
+                };
+            },
+            error: error
+        });
+    });
+
+  /* Aviso de error  */
+  var error = function (data) {
+      var html = '<div class="alert alert-danger" role="alert"> \
+                  <strong>Oh!</strong> Ha ocurrido un error en el servidor.\
+                  </div>';
+      $("#alert").html(html);
+  }
+});
 </script>
 {% endblock %}

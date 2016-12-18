@@ -15,8 +15,8 @@ class ParserView(TemplateView):
 		text = request.POST.get('text',None)
 		mode = request.POST.get('radio-modo',None)
 		model = request.POST.get('radio-modelo',None)
-		rawfile = request.POST.get('rawfile',None)
-		goldfile = request.POST.get('goldfile',None)
+		rawfile = request.FILES.get('rawfile',None)
+		goldfile = request.FILES.get('goldfile',None)
 		
 		# Options given by the user throut the template
 		print "Form Data:", text, mode, model, rawfile, goldfile
@@ -39,8 +39,6 @@ class ParserView(TemplateView):
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
 
 		if model == "Bikel" and mode == "Analisis":
-			# tagged_text_sentences = raw_tag(text)
-			# bracketed_text_sentences = to_bikel_format(tagged_text_sentences)
 			parse_trees = bikel_parser(text)
 			print "BIKEL:", parse_trees
 			raw_parse_trees = [str(tree) for tree in parse_trees]
@@ -50,6 +48,12 @@ class ParserView(TemplateView):
 			for i,raw_tree in enumerate(raw_parse_trees):
 				paths_to_tree_images.append(save_image_from_tree(
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
+
+		if model == "Standfor" and mode == "Test":
+			pass
+
+
+
 
 
 		# Template Rendetization
