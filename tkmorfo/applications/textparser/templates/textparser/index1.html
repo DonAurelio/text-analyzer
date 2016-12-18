@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
 <form action="{% url 'parser:analysis' %}"  method="POST">{% csrf_token %}
-    <div class="col-sm-10 blog-main">
+    <div class="col-sm-12 blog-main">
       <div class="panel panel-primary">
         <div class="panel-heading">
           <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span> Texto a analizar
@@ -15,6 +15,79 @@
           <div class="form-group">
               <div id="alert"></div>
           </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="panel panel-primary">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-text-size" aria-hidden="true"></span> New York Times
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" id="example1" name="radio-example" value="example1" >Ejemplo 1</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" id="example2" name="radio-example" value="example2" >Ejemplo 2</label>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="col-md-3">
+
+        <div class="panel panel-default">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Selecionar Modelo
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" name="radio-modelo" value="Bikel" >Bikel</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="radio-modelo" value="Standfor" >Standfor</label>
+            </div>
+          </div>
+        </div>
+       </div>
+        <div class="col-md-3">
+ 
+
+        <div class="panel panel-warning">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Seleccionar Modo
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" name="radio-modo" value="Analisis" >Analisis</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="radio-modo" value="Rendimiento" >Rendimiento del modelo</label>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="col-md-3">
+        
+                  <div class="panel panel-success">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-object-align-bottom" aria-hidden="true"></span> Selecionar Test
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" name="radio-test" value="Archivo1" >Archivo 1</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="radio-test" value="Archivo2" >Archivo 2</label>
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </div>
+
           <div class="btn-group pull-right" role="group" aria-label="...">
             <button id="btn-limpiar" type="submit" class="btn btn-primary">Limpiar</button>
             <button id="btn-analizar" type="submit" class="btn btn-success">Analizar</button>
@@ -23,9 +96,11 @@
       </div>
       <div id="result"></div>
     </div>
-    <div class="col-sm-2 blog-sidebar">
+
+{% comment %}
+    <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
       <div class="sidebar-module sidebar-module-inset">
-        <!-- <h4>Ejemplos</h4> -->
+        <h4>Ejemplos</h4>
         <div class="panel panel-primary">
           <!-- Default panel contents -->
           <div class="panel-heading">
@@ -42,11 +117,11 @@
         </div>
       </div>
       <div class="sidebar-module sidebar-module-inset">
-        <!-- <h4>Análisis Sintactico Probabilístico</h4> -->
+        <h4>Análisis Sintactico Probabilístico</h4>
         <div class="panel panel-default">
           <!-- Default panel contents -->
           <div class="panel-heading">
-            <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Modelo
+            <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Selecionar Modelo
           </div>
           <div class="panel-body">
             <div class="radio">
@@ -59,11 +134,27 @@
         </div>
       </div>
       <div class="sidebar-module sidebar-module-inset">
-        <!-- <h4>Presición y Recall</h4> -->
         <div class="panel panel-warning">
           <!-- Default panel contents -->
           <div class="panel-heading">
-            <span class="glyphicon glyphicon-object-align-bottom" aria-hidden="true"></span> Test
+            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Seleccionar Modo
+          </div>
+          <div class="panel-body">
+            <div class="radio">
+              <label><input type="radio" name="radio-modo" value="Analisis" >Analisis</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" name="radio-modo" value="Rendimiento" >Rendimiento del modelo</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-module sidebar-module-inset">
+        <h4>Presición y Recall</h4>
+        <div class="panel panel-success">
+          <!-- Default panel contents -->
+          <div class="panel-heading">
+            <span class="glyphicon glyphicon-object-align-bottom" aria-hidden="true"></span> Selecionar Test
           </div>
           <div class="panel-body">
             <div class="radio">
@@ -76,6 +167,7 @@
         </div>
       </div>
     </div><!-- /.blog-sidebar -->
+{% endcomment %}
   </form>
 </div>
 {% endblock %}
