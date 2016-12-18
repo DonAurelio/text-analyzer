@@ -16,8 +16,6 @@ def stanford_parser(text):
 	"""
 	return list(list( st_parser.raw_parse_sents(sent_tokenize(text)) ))
 
-def to_raw_tree(tree):
-	return str(list(tree)[0])
 
 def stanford_parser_outfile(inputfile, outputfile):
 	with open(inputfile, 'r') as f:

@@ -66,17 +66,17 @@
           </div>
           <div class="panel-body">
             <div class="radio">
-              <label><input type="radio" id="mode-analysis" checked="checked" name="radio-modo" value="Bikel" >Análisis</label>
+              <label><input type="radio" id="mode-analysis" checked="checked" name="radio-modo" value="Analisis" >Análisis</label>
             </div>
             <div class="radio">
-              <label><input type="radio" id="mode-test" name="radio-modo" value="Standfor" >Test</label>
+              <label><input type="radio" id="mode-test" name="radio-modo" value="Test" >Test</label>
             </div>
           </div>
         </div>
       </div>
       <div class="sidebar-module sidebar-module-inset">
         <!-- <h4>Ejemplos</h4> -->
-        <div class="panel panel-warning">
+        <div id="examples" class="panel panel-warning">
           <!-- Default panel contents -->
           <div class="panel-heading">
             <span class="glyphicon glyphicon-text-size" aria-hidden="true"></span> New York Times
@@ -100,10 +100,10 @@
           </div>
           <div class="panel-body">
             <div class="radio">
-              <label><input type="radio" name="radio-modelo" value="Bikel" >Bikel</label>
+              <label><input type="radio" name="radio-modelo" checked="checked" value="Standfor" >Standfor</label>
             </div>
             <div class="radio">
-              <label><input type="radio" name="radio-modelo" value="Standfor" >Standfor</label>
+              <label><input type="radio" name="radio-modelo" value="Bikel" >Bikel</label>
             </div>
           </div>
         </div>
@@ -120,15 +120,19 @@
 <script type="text/javascript">
   /* Mode selection */
   $("#div-analysis").show();
+  $("#examples").show();
   $("#div-test").hide();
+
 
   $("#mode-analysis").click(function(event){
     $("#div-analysis").show();
+    $("#examples").show();
     $("#div-test").hide();
   });
 
   $("#mode-test").click(function(event){
     $("#div-analysis").hide();
+    $("#examples").hide();
     $("#div-test").show();
   });
 

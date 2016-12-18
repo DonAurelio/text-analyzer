@@ -4,7 +4,8 @@ from django.template import loader
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from tools.textparsers import stanford_parser, to_raw_tree
+from tools.textparsers import stanford_parser
+from tools.textparsers import raw_tag, to_bikel_format, bikel_parser
 from tools.parsetreeimage import save_image_from_tree
 
 class ParserView(TemplateView):
@@ -12,24 +13,50 @@ class ParserView(TemplateView):
 
 	def post(self,request,*args,**kwargs):
 		text = request.POST.get('text',None)
-		model = request.POST.get('radio-modelo',None)
 		mode = request.POST.get('radio-modo',None)
-		test_file_name = request.POST.get('radio-test',None) 
-
+		model = request.POST.get('radio-modelo',None)
+		rawfile = request.POST.get('rawfile',None)
+		goldfile = request.POST.get('goldfile',None)
+		
 		# Options given by the user throut the template
-		print "Data:", text, model, mode, test_file_name
+		print "Form Data:", text, mode, model, rawfile, goldfile
 
 		# Text Processing
-		parse_trees = stanford_parser(text)
-		raw_parse_trees = [to_raw_tree(tree) for tree in parse_trees]
-		paths_to_tree_images = []
-		for i,raw_tree in enumerate(raw_parse_trees):
-			paths_to_tree_images.append(save_image_from_tree(
-				raw_tree=raw_tree,name='s%d'% i,type='standfor'))
+		parse_trees = None
+		raw_parse_trees = None
+		paths_to_tree_images = None
+		has_preprocessing = None
+		has_precision_and_recall = None
+
+		if model == "Standfor" and mode == "Analisis":
+			parse_trees = stanford_parser(text)
+			raw_parse_trees = [str(list(tree)[0]) for tree in parse_trees]
+			paths_to_tree_images = []
+			has_preprocessing = None
+			has_precision_and_recall = None
+			for i,raw_tree in enumerate(raw_parse_trees):
+				paths_to_tree_images.append(save_image_from_tree(
+					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
+
+		if model == "Bikel" and mode == "Analisis":
+			# tagged_text_sentences = raw_tag(text)
+			# bracketed_text_sentences = to_bikel_format(tagged_text_sentences)
+			parse_trees = bikel_parser(text)
+			print "BIKEL:", parse_trees
+			raw_parse_trees = [str(tree) for tree in parse_trees]
+			paths_to_tree_images = []
+			has_preprocessing = None
+			has_precision_and_recall = None
+			for i,raw_tree in enumerate(raw_parse_trees):
+				paths_to_tree_images.append(save_image_from_tree(
+					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
+
 
 		# Template Rendetization
 		template = loader.get_template('textparser/includes/result_analisys.html')
 		context = {
+			'has_preprocessing':has_preprocessing,
+			'has_precision_and_recall':has_precision_and_recall,
 			'raw_parse_trees':raw_parse_trees,
 			'paths_to_tree_images':paths_to_tree_images
 		}

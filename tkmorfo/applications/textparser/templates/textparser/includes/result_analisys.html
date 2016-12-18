@@ -4,6 +4,7 @@
 <!-- or <script src="{% static 'jquery/jquery.min.js' %}"></script> -->
 <script src="{% static 'ImageViewer-master/imageviewer.js' %}"></script>
 
+{% if has_preprocessing %}
 <div class="panel panel-default">
   <div class="panel-heading">Preprocesamiento</div>
   <div class="panel-body">
@@ -15,6 +16,7 @@
     </ul>
   </div>
 </div>
+{% endif %}
 <!-- Reference http://bootsnipp.com/snippets/featured/panels-with-nav-tabs -->
 <div class="panel panel-success">
     <div class="panel-heading">

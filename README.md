@@ -49,6 +49,7 @@ https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-doc
 
 HTML ImageViwer
 http://ignitersworld.com/lab/imageViewer.html
+http://dimsemenov.com/plugins/magnific-popup/
 
 
 # Install java for nltk stanfor postagger and parser into a container
