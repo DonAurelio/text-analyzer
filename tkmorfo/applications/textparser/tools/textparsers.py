@@ -5,6 +5,7 @@ from nltk import sent_tokenize
 from nltk import word_tokenize
 from nltk import Tree
 from helpers.utils import *
+from helpers.parseval.parseval import Modelo 
 #===============================================================================
 # functions
 
@@ -112,13 +113,22 @@ def get_raw_files_list():
 def execute_parseval(raw_file_name):
 	raw_file_path = abs_path + '/00-raw/' + raw_file_name
 	gold_file_path = abs_path + '/00/' + raw_file_name + '.mrg'
+	# To check if a path is an existing file:
+	if not os.path.isfile(gold_file_path):
+		gold_file_path = abs_path + '/00/' + raw_file_name.split('_')[0] + '_0' +\
+		raw_file_name.split('_')[1] + '.mrg'
 	bikel_parsed_file = abs_path + '/parseval/test/' + raw_file_name + '.bkl.parsed'
 	stanford_parsed_file = abs_path + '/parseval/test/' + raw_file_name + '.stf.parsed'
 
 	stanford_parser_outfile(raw_file_path, stanford_parsed_file)
-	bikel_parser_outfile(raw_file_path, bikel_parsed_file)
+	#bikel_parser_outfile(raw_file_path, bikel_parsed_file)
 
-	# parseval(gold_file_path, bikel_parsed_file)
-	# parseval(gold_file_path, stanford_parsed_file)
+	print gold_file_path
+	model = Modelo()
+	l=[0, '-c']
+
+	# Average precision, recall,  cross brackets and F-score:'
+	pre1, re1, crossing, fscore = model.parseval(stanford_parsed_file, gold_file_path, l)
+	# parseval(bikel_parsed_file, gold_file_path)
 
 #===============================================================================
