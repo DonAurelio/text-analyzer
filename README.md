@@ -7,13 +7,30 @@ This projects is dedicated to an University Assignment related with Natural Lang
 
 More information, please check the wiki of this project.
 
-## Deployment
+```
+TextAnalyser
+│   README.md
+│   file001.txt    
+│
+└───folder1
+│   │   file011.txt
+│   │   file012.txt
+│   │
+│   └───subfolder1
+│       │   file111.txt
+│       │   file112.txt
+│       │   ...
+│   
+└───folder2
+    │   file021.txt
+    │   file022.txt
+```
 
-This projects was designed into a container:
+## Setting The Docker Container
 
-The first module **Tokenization** and **Morfological Analisys** depends on freeling and python 2.7. You can find those package installed on this [docker image](https://drive.google.com/file/d/0ByEHTU9ch3ZwcmJlQW5qdGkyT0E/view?usp=sharing)
+This projects was designed into a container, The first module **Tokenization** and **Morfological Analisys** depends on freeling and python 2.7. You can find those package installed on this [docker image](https://drive.google.com/file/d/0ByEHTU9ch3ZwcmJlQW5qdGkyT0E/view?usp=sharing).
 
-The second module **Syntatic Analisys** depends on:
+The second module **Syntatic Analisys** depends of the following libraries
 
 - Dan Bikel’s Parsing Engine: dbparser.tar.gz
 
@@ -48,15 +65,6 @@ Xvfb :1 -screen 0 1024x768x16 &> xvfb.log  &
 DISPLAY=:1.0
 export DISPLAY
 ```
-
-http://www.howtogeek.com/109369/how-to-quickly-resize-convert-modify-images-from-the-linux-terminal/
-https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-docker-container/
-
-
-HTML ImageViwer
-
-http://dimsemenov.com/plugins/magnific-popup/
-
 
 ### Installing Java for nltk Stanford Pos tagger and parser in the Container
 
