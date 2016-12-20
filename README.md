@@ -73,7 +73,11 @@ jar xf stanford-parser-3.6.0-models.jar edu/stanford/nlp/models/lexparser/englis
 # References
 
 [1] [Image Viwer HTML Module](http://ignitersworld.com/lab/imageViewer.html)
+
 [2] [Running a GUI Application in a Docker Container](https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-docker-container/)
+
 [3] [Draw Parse Trees with NLTK](http://stackoverflow.com/questions/23429117/saving-nltk-drawn-parse-tree-to-image-file) 
+
 [4] [Installing Java 8](http://stackoverflow.com/questions/35130798/install-java-8-in-debian-jessie)
+
 [5] [ImagViwer](http://ignitersworld.com/lab/imageViewer.html)
