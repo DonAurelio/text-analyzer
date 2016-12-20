@@ -31,7 +31,7 @@ Those files can be found [this](https://drive.google.com/drive/folders/0ByEHTU9c
 
 
 
-### Run graphical applications into a contaner
+### Runnig Graphical Applications Into a Contaner
 
 To run the **Syntactic Analisys** module the container needs to be able to "show" or "create" grafical UIS. This allow the app to create the parse tree images generated with nltk.
 
@@ -54,11 +54,11 @@ https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-doc
 
 
 HTML ImageViwer
-http://ignitersworld.com/lab/imageViewer.html
+
 http://dimsemenov.com/plugins/magnific-popup/
 
 
-### Installing Java for nltk Stanford Pos tagger and parser in the container
+### Installing Java for nltk Stanford Pos tagger and parser in the Container
 
 ```{r, engine='bash', count_lines}
 echo deb http://http.debian.net/debian jessie-backports main >> /etc/apt/sources.list
@@ -72,9 +72,8 @@ jar xf stanford-parser-3.6.0-models.jar edu/stanford/nlp/models/lexparser/englis
 --->
 # References
 
-[1] http://ignitersworld.com/lab/imageViewer.html
-[2] http://www.howtogeek.com/109369/how-to-quickly-resize-convert-modify-images-from-the-linux-terminal/
-[3] https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-docker-container/
-[4] http://stackoverflow.com/questions/23429117/saving-nltk-drawn-parse-tree-to-image-file
-[5] https://docs.oracle.com/javase/tutorial/deployment/jar/unpack.html
-[6] http://stackoverflow.com/questions/35130798/install-java-8-in-debian-jessie
+[1] [Image Viwer HTML Module](http://ignitersworld.com/lab/imageViewer.html)
+[2] [Running a GUI Application in a Docker Container](https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-docker-container/)
+[3] [Draw Parse Trees with NLTK](http://stackoverflow.com/questions/23429117/saving-nltk-drawn-parse-tree-to-image-file) 
+[4] [Installing Java 8](http://stackoverflow.com/questions/35130798/install-java-8-in-debian-jessie)
+[5] [ImagViwer](http://ignitersworld.com/lab/imageViewer.html)
