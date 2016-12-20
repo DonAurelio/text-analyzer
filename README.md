@@ -8,7 +8,31 @@ This projects is dedicated to an University Assignment related with Natural Lang
 More information, please check the wiki of this project.
 
 ## Deployment
-This projects was designed inside a container:
+This projects was designed in a container:
+
+* The first module **Tokenization** and **Morfological Analisys** depends on freeling and python 2.7. You can find those package installed on this [docker image](https://drive.google.com/file/d/0ByEHTU9ch3ZwcmJlQW5qdGkyT0E/view?usp=sharing)
+
+* The second module **Syntatic Analisys** depends on:
+
+- Dan Bikel’s Parsing Engine
+> dbparser.tar.gz
+
+- Penn Treebank based Trainning set 
+> wsj-02-21.mrg.tar.gz
+
+- Evaluate the accurancy of the model 
+> parseval.tar.gz
+
+- Test set
+> 00-raw.tar.gz
+
+Those files can be found [this](https://drive.google.com/drive/folders/0ByEHTU9ch3ZwSkhqNl95SUxiZ2M?usp=sharing). Other needed files are:
+
+- Stanford Statistical Parser
+> [stanford-parser-full-2015-12-09.zip](http://nlp.stanford.edu/software/stanford-parser-full-2015-12-09.zip)
+
+- Stanford Postagger
+> [stanford-postagger-2015-12-09.zip](http://nlp.stanford.edu/software/stanford-postagger-2015-12-09.zip)
 
 
 http://ignitersworld.com/lab/imageViewer.html
@@ -16,36 +40,23 @@ http://www.howtogeek.com/109369/how-to-quickly-resize-convert-modify-images-from
 https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-docker-container/
 http://stackoverflow.com/questions/23429117/saving-nltk-drawn-parse-tree-to-image-file
 
-# Dan Bikel’s Parsing Engine
-dbparser.tar.gz
+### Run graphical applications into a contaner
 
-# Penn Treebank based Trainning set 
-wsj-02-21.mrg.tar.gz
+To run the **Syntactic Analisys** module the container needs to be able to "show" or "create" grafical UIS. This allow the app to create the parse tree images generated with nltk.
 
-# Evaluate the accurancy of the model 
-parseval.tar.gz
+```{r, engine='bash', count_lines}
+apt-get install python-tk
+apt-get update
+apt-get install xvfb
+apt-get install imagemagick
+```
 
-# Test set
-00-raw.tar.gz
-
-# Run graphical applications into a contaner
-
-* install the python-tk
-
-* apt-get update
-
-* apt-get install xvfb
 
 * Xvfb :1 -screen 0 1024x768x16 &> xvfb.log  &
-
-* ps aux | grep X
 
 * DISPLAY=:1.0
 
 * export DISPLAY
-
-* apt-get install imagemagick
-
 http://www.howtogeek.com/109369/how-to-quickly-resize-convert-modify-images-from-the-linux-terminal/
 https://linuxmeerkat.wordpress.com/2014/10/17/running-a-gui-application-in-a-docker-container/
 
