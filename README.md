@@ -1,29 +1,37 @@
 # TextAnalyzer
 
-This projects is dedicated to an University Assignment related with Natural Language Processing. This implemenation covers topics like:
+This projects is dedicated to an University Assignment related with Natural Language Processing. The application was designed in python 2.7 with Django 1.9 and is composed by:
 
-* **Tokenization** and **Morfological Analisys** in the first module (called morfo) using freeling with python. 
-* The second module (textparser) covers **Syntactic Analisys**, it deals with the generation of syntactic trees using probabilistic models (Stanford and Bikel). 
+* **Tokenization** and **Morfological Analisys** module (called morfo) using freeling and Python 2.7. This app takes a raw text and performs the corresponding Morfoligical Analysis.
+* The second module (textparser) covers **Syntactic Analisys**. It deals with the generation of syntactic trees using probabilistic models (Stanford and Bikel) given a raw text. 
 
-More information, please check the wiki of this project.
+
+## Running this project
+
+To getting this projecto working we need to setting up the **morfo** and **textparser** modules. The configuration 
 
 ```
 TextAnalyser
 │   README.md
-│   file001.txt    
+│   requirements.txt    
 │
-└───folder1
-│   │   file011.txt
-│   │   file012.txt
-│   │
-│   └───subfolder1
-│       │   file111.txt
-│       │   file112.txt
-│       │   ...
-│   
-└───folder2
-    │   file021.txt
-    │   file022.txt
+└───tkmorfo
+        applications
+        |
+        └───morfo
+        |           
+        └───textparser
+                tools
+                |
+                └───helpers
+                        00-raw
+                        00
+                        dbparser
+                        parseval
+                        stanford-parserfull-2015-12-09
+                        stanford-postagger-2015-12-09
+                        utils.py
+
 ```
 
 ## Setting The Docker Container
