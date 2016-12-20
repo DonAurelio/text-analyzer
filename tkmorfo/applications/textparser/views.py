@@ -15,7 +15,6 @@ class ParserView(TemplateView):
 	def get_context_data(self,**kwargs):
 		context = super(ParserView,self).get_context_data(**kwargs)
 		context['raw_files'] = sorted(get_raw_files_list())
-		print "RAW FILES", context['raw_files']
 		return context
 
 	def post(self,request,*args,**kwargs):
@@ -35,7 +34,7 @@ class ParserView(TemplateView):
 		has_preprocessing = None
 		has_precision_and_recall = None
 
-		if model == "Standfor" and mode == "Analisis":
+		if model == "Standfor" and mode == "Analisis" and len(text) != 0:
 			parse_trees = stanford_parser(text)
 			raw_parse_trees = [str(list(tree)[0]) for tree in parse_trees]
 			paths_to_tree_images = []
@@ -45,7 +44,7 @@ class ParserView(TemplateView):
 				paths_to_tree_images.append(save_image_from_tree(
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
 
-		if model == "Bikel" and mode == "Analisis":
+		if model == "Bikel" and mode == "Analisis" and len(text) != 0:
 			preprocessing ,parse_trees = bikel_parser(text)
 			raw_parse_trees = [str(tree) for tree in parse_trees]
 			paths_to_tree_images = []
@@ -55,7 +54,7 @@ class ParserView(TemplateView):
 				paths_to_tree_images.append(save_image_from_tree(
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
 
-		if mode == "Test":
+		if mode == "Test" and len(text) != 0:
 			pass
 			
 		# Template Rendetization
@@ -70,10 +69,9 @@ class ParserView(TemplateView):
 
 		# Text validations, if the text field is empty, we return and error or
 		# False status
-		if len(text) == 0:
-			respuesta = {'status':False,'html':html}
-		else:
-			respuesta = {'status':True,'html':html}
+		respuesta = {
+		'status':False if len(text) == 0 else True,
+		'html':html }
 
 		data = json.dumps(respuesta)
 		return HttpResponse(data,content_type='application/json')
