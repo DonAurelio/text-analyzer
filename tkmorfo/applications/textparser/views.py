@@ -28,26 +28,34 @@ class ParserView(TemplateView):
 		print "Form Data:", text, mode, model, rawfile
 
 		# Text Processing
-		parse_trees = None
+		raw_parse_trees = None
 		preprocessing = None
 		raw_parse_trees = None
 		paths_to_tree_images = None
 		has_preprocessing = None
 		has_precision_and_recall = None
+		context = {}
+		template = None
+		html = None
+		status = None
 
 		if model == "Standfor" and mode == "Analisis" and len(text) != 0:
-			parse_trees = stanford_parser(text)
-			raw_parse_trees = [str(list(tree)[0]) for tree in parse_trees]
+			status = False if len(text) == 0 else True
+			raw_parse_trees = stanford_parser(text)
 			paths_to_tree_images = []
 			has_preprocessing = None
 			has_precision_and_recall = None
 			for i,raw_tree in enumerate(raw_parse_trees):
 				paths_to_tree_images.append(save_image_from_tree(
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
+		
+			context['preprocessing'] = preprocessing
+			context['raw_parse_trees'] = raw_parse_trees
+			context['paths_to_tree_images'] = paths_to_tree_images
 
 		if model == "Bikel" and mode == "Analisis" and len(text) != 0:
-			preprocessing ,parse_trees = bikel_parser(text)
-			raw_parse_trees = [str(tree) for tree in parse_trees]
+			status = False if len(text) == 0 else True
+			preprocessing ,raw_parse_trees = bikel_parser(text)
 			paths_to_tree_images = []
 			has_preprocessing = None
 			has_precision_and_recall = None
@@ -55,24 +63,48 @@ class ParserView(TemplateView):
 				paths_to_tree_images.append(save_image_from_tree(
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
 
-		if mode == "Test" and len(text) != 0:
-			precision, recall, crossing, fscore = execute_parseval(rawfile)
+			context['preprocessing'] = preprocessing
+			context['raw_parse_trees'] = raw_parse_trees
+			context['paths_to_tree_images'] = paths_to_tree_images
+
+		if mode == "Test":
+			status = True
+			stanford, bikel = execute_parseval(rawfile)
+
+			context['stanford'] = stanford
+			s_raw_parse_trees = stanford['result']
+			stanford_tree_images = []
+			for i,raw_tree in enumerate(s_raw_parse_trees):
+				stanford_tree_images.append(save_image_from_tree(
+					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
+
+			context['stanford_tree_images'] = stanford_tree_images
+
+			context['bikel'] = bikel
+			bikel_tree_images = []
+			b_raw_parse_trees = bikel['result'][1]
+			for i,raw_tree in enumerate(b_raw_parse_trees):
+				bikel_tree_images.append(save_image_from_tree(
+					raw_tree=raw_tree,name='s%d'% i,type='bikel'))
+
+			context['bikel_tree_images'] = bikel_tree_images
+
 
 		# Template Rendetization
-		template = loader.get_template('textparser/includes/result_analisys.html')
-		context = {
-			'preprocessing':preprocessing,
-			'has_precision_and_recall':has_precision_and_recall,
-			'raw_parse_trees':raw_parse_trees,
-			'paths_to_tree_images':paths_to_tree_images
-		}
+		if mode == "Analisis":
+			template = loader.get_template('textparser/includes/result_analisys.html')
+			print "A1"
+		else:
+			template = loader.get_template('textparser/includes/result_test.html')
+			print "A2"
 		html = template.render(context)
 
 		# Text validations, if the text field is empty, we return and error or
 		# False status
 		respuesta = {
-		'status':False if len(text) == 0 else True,
-		'html':html }
+		'status':status,
+		'html':html 
+		}
 
 		data = json.dumps(respuesta)
 		return HttpResponse(data,content_type='application/json')

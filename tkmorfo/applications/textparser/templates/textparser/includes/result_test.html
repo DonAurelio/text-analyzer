@@ -1,38 +1,90 @@
 {% load staticfiles %}
+<link href="{% static 'ImageViewer-master/imageviewer.css' %}"  rel="stylesheet" type="text/css" />
+<script src="{% static 'jquery/jquery.min.js' %}"></script> 
+<!-- or <script src="{% static 'jquery/jquery.min.js' %}"></script> -->
+<script src="{% static 'ImageViewer-master/imageviewer.js' %}"></script>
 
 <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading">Panel heading</div>
-  <div class="panel-body">
-    <p>...</p>
+  <div class="panel-heading">Medidas de Rendimiento</div>
+    <div class="panel-body">
+    <!-- Table -->
+    <table class="table">
+      <thead>
+          <tr>
+              <th>Modelo</th>
+              <th>Presición</th>
+              <th>Recall</th>
+              <th>Fscore</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr class="active">
+            <td>Standfor</td>
+            <td>{{ stanford.pre }}</td>
+            <td>{{ stanford.re }}</td>
+            <td>{{ stanford.fscore }}</td>
+          </tr>
+          <tr class="info">
+            <td>Bikel</td>
+            <td>{{ bikel.pre }}</td>
+            <td>{{ bikel.re }}</td>
+            <td>{{ bikel.fscore }}</td>
+          </tr>
+      </tbody>
+    </table>
   </div>
-
-  <!-- Table -->
-  <table class="table">
-    <thead>
-        <tr>
-            <th>Modelo</th>
-            <th>Presición</th>
-            <th>Presición</th>
-            <th>Reacall</th>
-            <th>Fscore</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="active">
-          <td>Standfor</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr class="info">
-          <td>Bikel</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-    </tbody>
-  </table>
 </div>
+
+<h2>Bikel</h2>
+<h3>Preprocesamiento</h3>
+<hr>
+<div class="panel">
+    <p>{{ bikel.result.0 }}</p>
+</div>
+
+<h3>Analisis Sintactico Raw</h3>
+<hr>
+{% for raw_tree in bikel.result.1 %}
+<div class="panel">
+    <h4><strong>Sentencia {{ forloop.counter }}</strong></h4>
+    <!-- <textarea class="form-control" rows="20">{{ raw_tree }}</textarea> -->
+    <p>{{ raw_tree }}</p>
+</div>
+{% endfor %}
+
+<h3>Analisis Sintactico Arboles</h3>
+<hr>
+{% for path in bikel_tree_images %}
+<h4><strong>Sentencia {{ forloop.counter }}</strong></h4>
+<div class="panel">
+    <img src="{{ path }}" width="100%" height="400px" alt="" class="pannable-image">
+</div>
+{% endfor %}
+
+<h2>Stanfor</h2>
+
+<h3>Analisis Sintactico Raw</h3>
+<hr>
+{% for raw_tree in bikel.result.1 %}
+<div class="panel">
+    <h4><strong>Sentencia {{ forloop.counter }}</strong></h4>
+    <!-- <textarea class="form-control" rows="20">{{ raw_tree }}</textarea> -->
+    <p>{{ raw_tree }}</p>
+</div>
+{% endfor %}
+
+<h3>Analisis Sintactico Arboles</h3>
+<hr>
+{% for path in bikel_tree_images %}
+<h4><strong>Sentencia {{ forloop.counter }}</strong></h4>
+<div class="panel">
+    <img src="{{ path }}" width="100%" height="400px" alt="" class="pannable-image">
+</div>
+{% endfor %}
+
+<script type="text/javascript">
+    $(function () {
+        $('.pannable-image').ImageViewer();
+    });
+</script>

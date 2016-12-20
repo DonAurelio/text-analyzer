@@ -20,10 +20,11 @@ def stanford_parser(sentences):
 	# sent_tokenize is a text segmenter, it takes str and returns list(str)
 	# st_parser.raw_parse_sents is a StanforParser, it takes list(list(str))
 	# and returns a parse tree iter(iter(Tree))
-	return list(list( st_parser.raw_parse_sents(sent_tokenize(sentences)) ))
+	parse_trees = list(list( st_parser.raw_parse_sents(sent_tokenize(sentences)) ))
+	raw_parse_trees = [str(list(tree)[0]) for tree in parse_trees]
+	return raw_parse_trees
 
-
-def stanford_parser_outfile(inputfile, outputfile):
+def stanford_parse_from_file(inputfile, outputfile):
 	"""
 	Reads a file located in 'input' file path, create the parse trees
 	corresponding with each sentences in the text from the given input
@@ -33,28 +34,20 @@ def stanford_parser_outfile(inputfile, outputfile):
 	outputfile:: str complete path to an output file
 	Return type:: iter(iter(Tree)) parce trees one for each sentence in a text
 	"""
+	# Reading the input text file
 	with open(inputfile, 'r') as f:
-		f.readline() # Skip the first line | .START
+		f.readline() # Skip the first line '.START' present in all 00-raw files
 		sentences = f.read()
-	trees = stanford_parser(sentences)
+
+	# Parsing the gievn text
+	raw_parse_trees = stanford_parser(sentences)
+
+	# Writting the resulting parse trees in a given outputfile
 	with open(outputfile, 'w') as f:
-		for t in list(trees):
-			f.write(str(list(t)[0]).replace("ROOT", "")+"\n")
+		for t in raw_parse_trees:
+			f.write(t.replace("ROOT", "")+"\n")
 
-	return trees
-
-def raw_tag(text):
-	"""
-	Tags multiple sentences. Takes multiple sentences as a String; before
-	tagging, it will be automatically segmented and tokenized
-	
-	Parameters:: text (str) 
-	Return type:: (list(list(tuple(str, str))))
-	"""
-	sentences = sent_tokenize(text) # Segment sentences
-	tokenized_sentences = [st_tknzr.tokenize(s) for s in sentences] # Tokenizer
-	result = st_tagger.tag_sents(tokenized_sentences) # PosTagger
-	return result
+	return raw_parse_trees
 
 def to_bikel_format(tagged_sents):
 	"""
@@ -70,6 +63,19 @@ def to_bikel_format(tagged_sents):
 		for item in sentence:
 			result = result + "("+item[0]+" "+"("+item[1]+")) "
 		result += ") "
+	return result
+
+def raw_tag(text):
+	"""
+	Tags multiple sentences. Takes multiple sentences as a String; before
+	tagging, it will be automatically segmented and tokenized
+	
+	Parameters:: text (str) 
+	Return type:: (list(list(tuple(str, str))))
+	"""
+	sentences = sent_tokenize(text) # Segment sentences
+	tokenized_sentences = [st_tknzr.tokenize(s) for s in sentences] # Tokenizer
+	result = st_tagger.tag_sents(tokenized_sentences) # PosTagger
 	return result
 
 def bikel_parser(sentences):
@@ -92,44 +98,49 @@ def bikel_parser(sentences):
 		f.write(raw_bracketed_tagged_sents)
 
 	cmd = bk_parser_path + " 400 " + bk_settings + " " + bk_parser_model + " " + temp_file
-	os.popen(cmd).read()
+	os.popen(cmd).read() # writes the file '.parsed' given by the bikel parser
 	os.remove(temp_file)
 
 	# dbparser implementation creates a file with '.parsed' extension
 	# so we read that file to get the parse trees generated
 	result_file = abs_path + '/input' + '.bkl' + '.parsed'
-	trees = []
+	parse_trees = []
 	with open(result_file, 'r') as f:
 		for line in f:
-			trees.append(Tree.fromstring(line))
+			parse_trees.append(Tree.fromstring(line))
 	os.remove(result_file)
+
+	raw_parse_trees = [str(tree) for tree in parse_trees]
 
 	# return the preprocessing the text (raw_bracketed_tagged_sents)
 	# and the generated trees
-	return raw_bracketed_tagged_sents , trees
+	return raw_bracketed_tagged_sents , raw_parse_trees
 	
 
-def bikel_parser_outfile(inputfile):
+def bikel_parse_from_file(inputfile,outputfile):
 	# Lee el archivo de entrada, aplica pos_tag, guardar archivo auxiliar,
 	# ejecuta comando para parser bikel, guarda salida en archivo final
 	# (inputfile.bkl.parse)
+
 	with open(inputfile, 'r') as f:
 		f.readline() # Skip the first line | .START
 		sentences = f.read()
+
+
+	raw_bracketed_tagged_sents , raw_parse_trees = bikel_parser(sentences)
+
 	# Tagged_sents: list(list(tuple)), list(tuple) is a sentence and tuple is a (word,postag)
 	tagged_sents = raw_tag(sentences)
 	temp_file = inputfile+'.bkl'
 	bracketed_sentences = None
-	with open(temp_file, 'w') as f:
-		bracketed_tagged_sentences = to_bikel_format(tagged_sents)
-		f.write(bracketed_tagged_sentences)
+	with open(outputfile, 'w') as f:
+		for raw_tree in raw_parse_trees:
+			f.write(raw_tree)
+
 	cmd = bk_parser_path + " 400 " + bk_settings + " " + bk_parser_model + " " + temp_file
 	os.popen(cmd).read()
-	# print(temp_file+'.parsed')
-	# os.rename(temp_file+'.parsed',outputfile)
-	os.remove(temp_file)
 
-	return bracketed_tagged_sentences
+	return raw_bracketed_tagged_sents, raw_parse_trees
 
 def get_raw_files_list():
 	files = list(os.walk(abs_path + '/00-raw/'))[0][2]
@@ -143,16 +154,24 @@ def execute_parseval(raw_file_name):
 	if not os.path.isfile(gold_file_path):
 		gold_file_path = abs_path + '/00/' + raw_file_name.split('_')[0] + '_0' +\
 		raw_file_name.split('_')[1] + '.mrg'
-	bikel_parsed_file = abs_path + '/parseval/test/' + raw_file_name + '.bkl.parsed'
-	stanford_parsed_file = abs_path + '/parseval/test/' + raw_file_name + '.stf.parsed'
+	bikel_parsed_file = abs_path + '/parseval/testfiles/' + raw_file_name + '.bkl.parsed'
+	stanford_parsed_file = abs_path + '/parseval/testfiles/' + raw_file_name + '.stf.parsed'
 
-	standfor_trees = stanford_parser_outfile(raw_file_path, stanford_parsed_file)
-	# bikel_trees = bikel_parser_outfile(raw_file_path, bikel_parsed_file)
+	stanford_result = stanford_parse_from_file(raw_file_path, stanford_parsed_file)
+	bikel_result = bikel_parse_from_file(raw_file_path, bikel_parsed_file)
 	model = Modelo()
 	l=[0, '-c']
 
 	# Average precision, recall,  cross brackets and F-score:'
-	pre1, re1, crossing, fscore = model.parseval(stanford_parsed_file, gold_file_path, l)
-	# parseval(bikel_parsed_file, gold_file_path)
+	pre1, re1, crossing1, fscore1 = model.parseval(stanford_parsed_file, gold_file_path, l)
+	pre2, re2, crossing2, fscore2 = model.parseval(bikel_parsed_file, gold_file_path, l)
+	
+	# os.remove(stanford_parsed_file)
+	# os.remove(bikel_parsed_file)
 
-#===============================================================================
+	stanford = { 'pre':pre1,'re':re1,'fscore':fscore1,'result':stanford_result }
+	bikel = { 'pre':pre2,'re':re2,'fscore':fscore2,'result':bikel_result }
+
+	results = (stanford,bikel)
+
+	return results

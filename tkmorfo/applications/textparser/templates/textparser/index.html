@@ -14,7 +14,7 @@
               <textarea id="text" name="text" class="form-control" rows="3" placeholder="Escriba el texto aqui ..."></textarea>
           </div>
           <div class="form-group">
-              <div id="alert"></div>
+              <div class="alert"></div>
           </div>
           <div class="btn-group pull-right" role="group" aria-label="...">
             <button id="btn-limpiar-analysis" type="submit" class="btn btn-primary">Limpiar</button>
@@ -43,7 +43,7 @@
             </div><!-- /.row -->
           </div>
           <div class="form-group">
-              <div id="alert"></div>
+              <div class="alert"></div>
           </div>
           <div class="btn-group pull-right" role="group" aria-label="...">
             <button id="btn-limpiar-test" type="submit" class="btn btn-primary">Limpiar</button>
@@ -189,7 +189,7 @@
                       var html = '<div class="alert alert-warning" role="alert"> \
                       <strong>Oh!</strong> Debe diligenciar bien el campo de texto.\
                       </div>';
-                    $("#alert").html(html);
+                    $(".alert").html(html);
                 };
             },
             error: error
