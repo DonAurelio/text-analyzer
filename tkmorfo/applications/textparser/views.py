@@ -14,7 +14,7 @@ class ParserView(TemplateView):
 
 	def get_context_data(self,**kwargs):
 		context = super(ParserView,self).get_context_data(**kwargs)
-		context['raw_files'] = get_raw_files_list()
+		context['raw_files'] = sorted(get_raw_files_list())
 		print "RAW FILES", context['raw_files']
 		return context
 
@@ -29,6 +29,7 @@ class ParserView(TemplateView):
 
 		# Text Processing
 		parse_trees = None
+		preprocessing = None
 		raw_parse_trees = None
 		paths_to_tree_images = None
 		has_preprocessing = None
@@ -45,8 +46,7 @@ class ParserView(TemplateView):
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
 
 		if model == "Bikel" and mode == "Analisis":
-			parse_trees = bikel_parser(text)
-			print "BIKEL:", parse_trees
+			preprocessing ,parse_trees = bikel_parser(text)
 			raw_parse_trees = [str(tree) for tree in parse_trees]
 			paths_to_tree_images = []
 			has_preprocessing = None
@@ -55,17 +55,13 @@ class ParserView(TemplateView):
 				paths_to_tree_images.append(save_image_from_tree(
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
 
-		if model == "Standfor" and mode == "Test":
+		if mode == "Test":
 			pass
-
-
-
-
-
+			
 		# Template Rendetization
 		template = loader.get_template('textparser/includes/result_analisys.html')
 		context = {
-			'has_preprocessing':has_preprocessing,
+			'preprocessing':preprocessing,
 			'has_precision_and_recall':has_precision_and_recall,
 			'raw_parse_trees':raw_parse_trees,
 			'paths_to_tree_images':paths_to_tree_images

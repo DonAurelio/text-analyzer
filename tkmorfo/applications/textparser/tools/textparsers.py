@@ -48,7 +48,7 @@ def bikel_parser(sentences):
 		f.write(".START \n")
 		for sent in segmented_sents:
 			f.write(sent+"\n")
-	bikel_parser_outfile(temp_file)
+	bracketed_tagged_sentences = bikel_parser_outfile(temp_file)
 	os.remove(temp_file)
 
 	output_file = abs_path+'/input'+'.bkl.parsed'
@@ -57,20 +57,25 @@ def bikel_parser(sentences):
 		for line in f:
 			trees.append(Tree.fromstring(line))
 	os.remove(output_file)
-	return trees
+	return bracketed_tagged_sentences , trees
 	
 
 def bikel_parser_outfile(inputfile):
 	with open(inputfile, 'r') as f:
 		f.readline() # Skip the first line | .START
 		sentences = f.read()
+	# Tagged_sents: list(list(tuple)), list(tuple) is a sentence and tuple is a (word,postag)
 	tagged_sents = raw_tag(sentences)
 	temp_file = inputfile+'.bkl'
+	bracketed_sentences = None
 	with open(temp_file, 'w') as f:
-		f.write(to_bikel_format(tagged_sents))
+		bracketed_tagged_sentences = to_bikel_format(tagged_sents)
+		f.write(bracketed_tagged_sentences)
 	cmd=bk_parser_path+" 400 "+bk_settings+" "+bk_parser_model+" "+temp_file
 	os.popen(cmd).read()
 	os.remove(temp_file)
+
+	return bracketed_tagged_sentences
 
 def get_raw_files_list():
 	files = list(os.walk(abs_path + '/00-raw/'))[0][2]

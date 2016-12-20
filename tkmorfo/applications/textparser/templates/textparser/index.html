@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
 <form action="{% url 'parser:analysis' %}"  method="POST">{% csrf_token %}
-    <div class="col-sm-10 blog-main">
+    <div class="col-sm-9 blog-main">
 
       <div id="div-analysis" class="panel panel-primary">
         <div class="panel-heading">
@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <div id="div-test" class="panel panel-warning">
+      <div id="div-test" class="panel panel-primary">
         <div class="panel-heading">
           <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Precisión y Recall
         </div>
@@ -54,7 +54,7 @@
 
       <div id="result"></div>
     </div>
-    <div class="col-sm-2 blog-sidebar">
+    <div class="col-sm-3 blog-sidebar">
       <div class="sidebar-module sidebar-module-inset">
         <!-- <h4>Análisis Sintactico Probabilístico</h4> -->
         <div class="panel panel-primary">
@@ -74,7 +74,7 @@
       </div>
       <div class="sidebar-module sidebar-module-inset">
         <!-- <h4>Ejemplos</h4> -->
-        <div id="examples" class="panel panel-warning">
+        <div id="examples" class="panel panel-primary">
           <!-- Default panel contents -->
           <div class="panel-heading">
             <span class="glyphicon glyphicon-text-size" aria-hidden="true"></span> New York Times
@@ -91,7 +91,7 @@
       </div>
       <div class="sidebar-module sidebar-module-inset">
         <!-- <h4>Análisis Sintactico Probabilístico</h4> -->
-        <div class="panel panel-default">
+        <div id="model" class="panel panel-primary">
           <!-- Default panel contents -->
           <div class="panel-heading">
             <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Modelo
@@ -120,18 +120,21 @@
     /* Mode selection */
     $("#div-analysis").show();
     $("#examples").show();
+    $("#model").show();
     $("#div-test").hide();
 
 
     $("#mode-analysis").click(function(event){
       $("#div-analysis").show();
       $("#examples").show();
+      $("#model").show();
       $("#div-test").hide();
     });
 
     $("#mode-test").click(function(event){
       $("#div-analysis").hide();
       $("#examples").hide();
+      $("#model").hide();
       $("#div-test").show();
     });
 
@@ -146,7 +149,6 @@
     $("#btn-limpiar-test").click(function(event){
       event.preventDefault();
       $("#rawfile").val("");
-      $("#goldfile").val("");
       $("#result").html("");
       $("#alert").html("");
     });
@@ -168,6 +170,10 @@
 
     function submit(event){
         event.preventDefault();
+        
+        $("#result").html("");
+        $("#alert").html("");
+
         $form.ajaxSubmit({
             url: $form.attr('action'),
             dataType: 'json',

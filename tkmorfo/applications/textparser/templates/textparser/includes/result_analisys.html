@@ -4,84 +4,34 @@
 <!-- or <script src="{% static 'jquery/jquery.min.js' %}"></script> -->
 <script src="{% static 'ImageViewer-master/imageviewer.js' %}"></script>
 
-{% if has_preprocessing %}
-<div class="panel panel-default">
-  <div class="panel-heading">Preprocesamiento</div>
-  <div class="panel-body">
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-success">Dapibus ac facilisis in</li>
-      <li class="list-group-item list-group-item-info">Cras sit amet nibh libero</li>
-      <li class="list-group-item list-group-item-warning">Porta ac consectetur ac</li>
-      <li class="list-group-item list-group-item-danger">Vestibulum at eros</li>
-    </ul>
-  </div>
+
+{% if preprocessing %}
+<h3>Preprocesamiento</h3>
+<hr>
+<div class="panel">
+    <p>{{ preprocessing }}</p>
 </div>
 {% endif %}
-<!-- Reference http://bootsnipp.com/snippets/featured/panels-with-nav-tabs -->
-<div class="panel panel-success">
-    <div class="panel-heading">
-        <h3 class="panel-title">Raw Arbol Sintáctico</h3>
-        <span class="pull-right">
-            <!-- Tabs -->
-            <ul class="nav panel-tabs">
-                {% for raw_tree in raw_parse_trees %}
-                {% if forloop.counter == 1 %}
-                <li class="active"><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{ forloop.counter }}</a></li>
-                {% else %}
-                <li><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{ forloop.counter }}</a></li>
-                {% endif %}
-                {% endfor %}
-            </ul>
-        </span>
-    </div>
-    <div class="panel-body">
-        <div class="tab-content">
-            {% for raw_tree in raw_parse_trees %}
-            {% if forloop.counter == 1 %}
-            <div class="tab-pane active" id="tab{{ forloop.counter }}">
-            {% else %}
-            <div class="tab-pane" id="tab{{ forloop.counter }}">
-            {% endif %}
-                <textarea class="form-control" rows="20">
-                {{ raw_tree }}
-                </textarea>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
 
-<!-- Reference http://bootsnipp.com/snippets/featured/panels-with-nav-tabs -->
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">Imagen Arbol Sintáctico</h3>
-        <span class="pull-right">
-            <!-- Tabs -->
-            <ul class="nav panel-tabs">
-                {% for path in paths_to_tree_images %}
-                {% if forloop.counter == 1 %}
-                <li class="active"><a href="#tab{{ forloop.counter |add:"60" }}" data-toggle="tab">{{ forloop.counter }}</a></li>
-                {% else %}
-                <li><a href="#tab{{ forloop.counter |add:"60" }}" data-toggle="tab">{{ forloop.counter }}</a></li>
-                {% endif %}
-                {% endfor %}
-            </ul>
-        </span>
-    </div>
-    <div class="panel-body">
-        <div class="tab-content">
-            {% for path in paths_to_tree_images %}
-            {% if forloop.counter == 1 %}
-            <div class="tab-pane active" id="tab{{ forloop.counter |add:"60" }}">
-            {% else %}
-            <div class="tab-pane" id="tab{{ forloop.counter |add:"60" }}">
-            {% endif %}
-                <img src="{{ path }}" width="100%" height="100%" alt="" class="pannable-image">
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+<h3>Analisis Sintactico Raw</h3>
+<hr>
+{% for raw_tree in raw_parse_trees %}
+<div class="panel">
+    <h4><strong>Sentencia {{ forloop.counter }}</strong></h4>
+    <!-- <textarea class="form-control" rows="20">{{ raw_tree }}</textarea> -->
+    <p>{{ raw_tree }}</p>
 </div>
+{% endfor %}
+
+<h3>Analisis Sintactico Arboles</h3>
+<hr>
+{% for path in paths_to_tree_images %}
+<h4><strong>Sentencia {{ forloop.counter }}</strong></h4>
+<div class="panel">
+    <img src="{{ path }}" width="100%" height="400px" alt="" class="pannable-image">
+</div>
+{% endfor %}
+
 
 <script type="text/javascript">
     $(function () {
@@ -89,45 +39,3 @@
     });
 </script>
 
-
-<style type="text/css">
-/*Panel tabs*/
-.panel-tabs {
-    position: relative;
-    bottom: 30px;
-    clear:both;
-    border-bottom: 1px solid transparent;
-}
-
-.panel-tabs > li {
-    float: left;
-    margin-bottom: -1px;
-}
-
-.panel-tabs > li > a {
-    margin-right: 2px;
-    margin-top: 4px;
-    line-height: .85;
-    border: 1px solid transparent;
-    border-radius: 4px 4px 0 0;
-    color: #ffffff;
-}
-
-.panel-tabs > li > a:hover {
-    border-color: transparent;
-    color: #ffffff;
-    background-color: transparent;
-}
-
-.panel-tabs > li.active > a,
-.panel-tabs > li.active > a:hover,
-.panel-tabs > li.active > a:focus {
-    color: #fff;
-    cursor: default;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgba(255,255,255, .23);
-    border-bottom-color: transparent;
-}
-</style>
