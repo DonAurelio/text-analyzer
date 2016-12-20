@@ -7,6 +7,7 @@ from django.views.generic import TemplateView
 from tools.textparsers import stanford_parser
 from tools.textparsers import raw_tag, to_bikel_format, bikel_parser
 from tools.textparsers import get_raw_files_list
+from tools.textparsers import execute_parseval
 from tools.parsetreeimage import save_image_from_tree
 
 class ParserView(TemplateView):
@@ -55,8 +56,8 @@ class ParserView(TemplateView):
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
 
 		if mode == "Test" and len(text) != 0:
-			pass
-			
+			execute_parseval(rawfile)
+
 		# Template Rendetization
 		template = loader.get_template('textparser/includes/result_analisys.html')
 		context = {

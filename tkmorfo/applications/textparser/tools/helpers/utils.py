@@ -6,7 +6,6 @@ from os.path import abspath
 import os
 
 abs_path = dirname(abspath(__file__))
-print "absulute path", abs_path
 
 # STANFORD TOOLS
 #-------------------------------------------------------------------------------
