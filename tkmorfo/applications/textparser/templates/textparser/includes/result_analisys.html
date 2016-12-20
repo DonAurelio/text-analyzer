@@ -6,32 +6,31 @@
 
 
 {% if preprocessing %}
-<h3>Preprocesamiento</h3>
+<h3 class="text-primary">Preprocesamiento</h3>
 <hr>
 <div class="panel">
     <p>{{ preprocessing }}</p>
 </div>
 {% endif %}
 
-<h3>Analisis Sintactico Raw</h3>
+<h3 class="text-primary">Analisis Sintactico Raw</h3>
 <hr>
 {% for raw_tree in raw_parse_trees %}
 <div class="panel">
-    <h4><strong>Sentencia {{ forloop.counter }}</strong></h4>
+    <h4 class="text-success"><strong>Sentencia {{ forloop.counter }}</strong></h4>
     <!-- <textarea class="form-control" rows="20">{{ raw_tree }}</textarea> -->
     <p>{{ raw_tree }}</p>
 </div>
 {% endfor %}
 
-<h3>Analisis Sintactico Arboles</h3>
+<h3 class="text-primary">Analisis Sintactico Arboles</h3>
 <hr>
 {% for path in paths_to_tree_images %}
-<h4><strong>Sentencia {{ forloop.counter }}</strong></h4>
+<h4 class="text-success"><strong>Sentencia {{ forloop.counter }}</strong></h4>
 <div class="panel">
     <img src="{{ path }}" width="100%" height="400px" alt="" class="pannable-image">
 </div>
 {% endfor %}
-
 
 <script type="text/javascript">
     $(function () {
