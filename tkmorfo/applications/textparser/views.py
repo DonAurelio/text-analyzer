@@ -56,7 +56,7 @@ class ParserView(TemplateView):
 					raw_tree=raw_tree,name='s%d'% i,type='standfor'))
 
 		if mode == "Test" and len(text) != 0:
-			execute_parseval(rawfile)
+			precision, recall, crossing, fscore = execute_parseval(rawfile)
 
 		# Template Rendetization
 		template = loader.get_template('textparser/includes/result_analisys.html')

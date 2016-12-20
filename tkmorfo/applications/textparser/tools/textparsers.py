@@ -11,22 +11,27 @@ from helpers.parseval.parseval import Modelo
 
 def stanford_parser(sentences):
 	"""
-	Takes multiple sentences as a String (sentences), applies the Stanford Parser
-	and return the trees parsed 
+	Takes texts, applies the Stanford Parser and return the 
+	corresponding parce trees.
 
-	* sent_tokenize is a text segmenter, it takes str and returns list(str),
-		where each str is a sentence.
-	* st_parser.raw_parse_sents is a StanforParser, it takes list(list(str))
-		and returns and returns a parse tree 
-		iter(iter(Tree)).
+	sentences:: str a text
+	Return type:: iter(iter(Tree)) parce trees one for each sentence in a text
 	"""
+	# sent_tokenize is a text segmenter, it takes str and returns list(str)
+	# st_parser.raw_parse_sents is a StanforParser, it takes list(list(str))
+	# and returns a parse tree iter(iter(Tree))
 	return list(list( st_parser.raw_parse_sents(sent_tokenize(sentences)) ))
 
 
 def stanford_parser_outfile(inputfile, outputfile):
 	"""
-	Lee el archivo de entrada input, genera el árbol sintáctico utilizando
-	el stanford_parser, guarda el resultado en el archivo output
+	Reads a file located in 'input' file path, create the parse trees
+	corresponding with each sentences in the text from the given input
+	file and save the result in an output path 
+
+	inputfile:: str complete path to an input file
+	outputfile:: str complete path to an output file
+	Return type:: iter(iter(Tree)) parce trees one for each sentence in a text
 	"""
 	with open(inputfile, 'r') as f:
 		f.readline() # Skip the first line | .START
@@ -36,13 +41,15 @@ def stanford_parser_outfile(inputfile, outputfile):
 		for t in list(trees):
 			f.write(str(list(t)[0]).replace("ROOT", "")+"\n")
 
+	return trees
+
 def raw_tag(text):
 	"""
 	Tags multiple sentences. Takes multiple sentences as a String; before
 	tagging, it will be automatically segmented and tokenized
 	
-	Parameters:	text (str) 
-	Return type:	(list(list(tuple(str, str))))
+	Parameters:: text (str) 
+	Return type:: (list(list(tuple(str, str))))
 	"""
 	sentences = sent_tokenize(text) # Segment sentences
 	tokenized_sentences = [st_tknzr.tokenize(s) for s in sentences] # Tokenizer
@@ -54,8 +61,8 @@ def to_bikel_format(tagged_sents):
 	Converts to bikel format (bracketing). Takes multiple sentences where each
 	sentence is a list of (word, tag) tuples.
 	
-	Parameters: tagged_sents (list(list(tuple(str, str))))
-	Return type: (str)
+	Parameters:: tagged_sents (list(list(tuple(str, str))))
+	Return type:: (str)
 	"""
 	result = ""
 	for sentence in tagged_sents:
@@ -70,25 +77,39 @@ def bikel_parser(sentences):
 	Recibe un conjunto de sentencias en un string, aplica el parser de bikel
 	y retorna el árbol sintáctico. No deja archivos residuales
 	"""
-	temp_file = abs_path + '/input'
+
+	# Bikel text preprocessing 
 	segmented_sents = sent_tokenize(sentences)
+	raw_segmented_sents = '\n'.join(segmented_sents)
+	raw_tagged_sents = raw_tag(raw_segmented_sents) # tag raw text 
+	raw_bracketed_tagged_sents = to_bikel_format(raw_tagged_sents)
+
+	# Save the preprocessing text into a file inside 'helpers' directory
+	# to execute the java bikel by os console an process that file
+	temp_file = abs_path + '/input' + '.bkl'
+
 	with open(temp_file, 'w') as f:
-		f.write(".START \n")
-		for sent in segmented_sents:
-			f.write(sent+"\n")
-	bracketed_tagged_sentences = bikel_parser_outfile(temp_file)
+		f.write(raw_bracketed_tagged_sents)
+
+	cmd = bk_parser_path + " 400 " + bk_settings + " " + bk_parser_model + " " + temp_file
+	os.popen(cmd).read()
 	os.remove(temp_file)
 
-	output_file = abs_path+'/input'+'.bkl.parsed'
+	# dbparser implementation creates a file with '.parsed' extension
+	# so we read that file to get the parse trees generated
+	result_file = abs_path + '/input' + '.bkl' + '.parsed'
 	trees = []
-	with open(output_file, 'r') as f:
+	with open(result_file, 'r') as f:
 		for line in f:
 			trees.append(Tree.fromstring(line))
-	os.remove(output_file)
-	return bracketed_tagged_sentences , trees
+	os.remove(result_file)
+
+	# return the preprocessing the text (raw_bracketed_tagged_sents)
+	# and the generated trees
+	return raw_bracketed_tagged_sents , trees
 	
 
-def bikel_parser_outfile(inputfile, outputfile):
+def bikel_parser_outfile(inputfile):
 	# Lee el archivo de entrada, aplica pos_tag, guardar archivo auxiliar,
 	# ejecuta comando para parser bikel, guarda salida en archivo final
 	# (inputfile.bkl.parse)
@@ -102,10 +123,10 @@ def bikel_parser_outfile(inputfile, outputfile):
 	with open(temp_file, 'w') as f:
 		bracketed_tagged_sentences = to_bikel_format(tagged_sents)
 		f.write(bracketed_tagged_sentences)
-	cmd=bk_parser_path+" 400 "+bk_settings+" "+bk_parser_model+" "+temp_file
+	cmd = bk_parser_path + " 400 " + bk_settings + " " + bk_parser_model + " " + temp_file
 	os.popen(cmd).read()
-	print(temp_file+'.parsed')
-	os.rename(temp_file+'.parsed',outputfile)
+	# print(temp_file+'.parsed')
+	# os.rename(temp_file+'.parsed',outputfile)
 	os.remove(temp_file)
 
 	return bracketed_tagged_sentences
@@ -118,17 +139,15 @@ def get_raw_files_list():
 def execute_parseval(raw_file_name):
 	raw_file_path = abs_path + '/00-raw/' + raw_file_name
 	gold_file_path = abs_path + '/00/' + raw_file_name + '.mrg'
-	# To check if a path is an existing file:
+	# To check if the path contains an existing file:
 	if not os.path.isfile(gold_file_path):
 		gold_file_path = abs_path + '/00/' + raw_file_name.split('_')[0] + '_0' +\
 		raw_file_name.split('_')[1] + '.mrg'
 	bikel_parsed_file = abs_path + '/parseval/test/' + raw_file_name + '.bkl.parsed'
 	stanford_parsed_file = abs_path + '/parseval/test/' + raw_file_name + '.stf.parsed'
 
-	stanford_parser_outfile(raw_file_path, stanford_parsed_file)
-	#bikel_parser_outfile(raw_file_path, bikel_parsed_file)
-
-	print gold_file_path
+	standfor_trees = stanford_parser_outfile(raw_file_path, stanford_parsed_file)
+	# bikel_trees = bikel_parser_outfile(raw_file_path, bikel_parsed_file)
 	model = Modelo()
 	l=[0, '-c']
 
