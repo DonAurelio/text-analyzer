@@ -6,7 +6,7 @@ colorama==0.3.2
 cryptography==0.6.1
 html5lib==0.999
 ndg-httpsclient==0.3.2
-nltk==3.2.1
+nltk==3.4.5
 ply==3.4
 pyOpenSSL==0.14
 pyasn1==0.1.7
