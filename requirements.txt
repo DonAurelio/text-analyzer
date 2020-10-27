@@ -3,7 +3,7 @@ argparse==1.2.1
 cffi==0.8.6
 chardet==2.3.0
 colorama==0.3.2
-cryptography==0.6.1
+cryptography==3.2
 html5lib==0.999
 ndg-httpsclient==0.3.2
 nltk==3.2.1
